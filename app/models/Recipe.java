@@ -1,14 +1,17 @@
 package models;
 
+import io.ebean.Model;
 import play.data.validation.Constraints;
 
-import javax.validation.Constraint;
+import javax.persistence.Entity;
+import javax.persistence.Id;
 import java.util.ArrayList;
 
-public class Recipe {
+@Entity
+public class Recipe extends Model{
 
-    @Constraints.Required
-    private Integer id;
+    @Id
+    private Long id;
 
     @Constraints.Required
     private String name;
@@ -19,19 +22,10 @@ public class Recipe {
     public Recipe() {
     }
 
-    public Recipe(Integer id, String name, String imageURL, ArrayList<Ingredient> ingredients) {
-        this.id = id;
+    public Recipe(String name, String imageURL, ArrayList<Ingredient> ingredients) {
         this.name = name;
         this.imageURL = imageURL;
         this.ingredients = ingredients;
-    }
-
-    public Integer getId() {
-        return id;
-    }
-
-    public void setId(Integer id) {
-        this.id = id;
     }
 
     public String getName() {
