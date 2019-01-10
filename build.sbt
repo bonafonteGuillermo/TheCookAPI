@@ -1,4 +1,4 @@
-name := """play-java-hello-world-web"""
+name := """play-cookapi"""
 organization := "com.example"
 
 version := "1.0-SNAPSHOT"
