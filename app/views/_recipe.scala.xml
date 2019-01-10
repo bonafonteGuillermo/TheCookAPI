@@ -1,5 +1,4 @@
 @(recipe: Recipe)
 <recipe>
     <name>@recipe.getName()</name>
-    <imageURL>@recipe.getImageURL()</imageURL>
 </recipe>

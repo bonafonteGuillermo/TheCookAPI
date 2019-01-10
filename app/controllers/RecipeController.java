@@ -2,6 +2,7 @@ package controllers;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import models.Recipe;
+import models.RecipeDetails;
 import play.data.Form;
 import play.data.FormFactory;
 import play.mvc.Controller;
@@ -40,7 +41,8 @@ public class RecipeController extends Controller {
     public Result retrieveRecipe(Integer recipeId) {
         Result result;
 
-        Recipe recipe = new Recipe(1, "Macarrones", "imagen", new ArrayList<>());
+//        Recipe recipe = new Recipe("Macarrones", new ArrayList<>(), new RecipeDetails());
+        Recipe recipe = new Recipe("Macarrones");
 
         if (request().accepts(Http.MimeTypes.JSON)) {
             JsonNode json = play.libs.Json.toJson(recipe);
@@ -71,8 +73,12 @@ public class RecipeController extends Controller {
 
         Result result;
 
-        Recipe recipe1 = new Recipe(1, "Macarrones", "imagen", new ArrayList<>());
-        Recipe recipe2 = new Recipe(2, "Paella", "imagen", new ArrayList<>());
+/*
+        Recipe recipe1 = new Recipe("Macarrones", new ArrayList<>(), new RecipeDetails());
+        Recipe recipe2 = new Recipe("Paella", new ArrayList<>(), new RecipeDetails());
+*/
+        Recipe recipe1 = new Recipe("Macarrones");
+        Recipe recipe2 = new Recipe("Paella");
 
         List<Recipe> recipeList = new ArrayList<>();
         recipeList.add(recipe1);

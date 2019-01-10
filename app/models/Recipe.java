@@ -1,32 +1,32 @@
 package models;
 
-import io.ebean.Model;
 import play.data.validation.Constraints;
 
+import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
-import javax.persistence.Id;
 import java.util.ArrayList;
 
 @Entity
-public class Recipe extends Model{
-
-    @Id
-    private Long id;
+public class Recipe extends BaseModel {
 
     @Constraints.Required
+    //TODO ***@EmbeddedId** with this anotation we can use primary composite key if needed
     private String name;
-
-    private String imageURL;
-    private ArrayList<Ingredient> ingredients = new ArrayList<Ingredient>();
+    /*private ArrayList<Ingredient> ingredients = new ArrayList<>();
+    private RecipeDetails details;*/
 
     public Recipe() {
     }
 
-    public Recipe(String name, String imageURL, ArrayList<Ingredient> ingredients) {
+    public Recipe(@Constraints.Required String name) {
         this.name = name;
-        this.imageURL = imageURL;
-        this.ingredients = ingredients;
     }
+
+    /*public Recipe(String name, ArrayList<Ingredient> ingredients, RecipeDetails details) {
+        this.name = name;
+        this.ingredients = ingredients;
+        this.details = details;
+    }*/
 
     public String getName() {
         return name;
@@ -36,19 +36,19 @@ public class Recipe extends Model{
         this.name = name;
     }
 
-    public String getImageURL() {
-        return imageURL;
-    }
-
-    public void setImageURL(String imageURL) {
-        this.imageURL = imageURL;
-    }
-
-    public ArrayList<Ingredient> getIngredients() {
+    /*public ArrayList<Ingredient> getIngredients() {
         return ingredients;
     }
 
     public void setIngredients(ArrayList<Ingredient> ingredients) {
         this.ingredients = ingredients;
     }
+
+    public RecipeDetails getDetails() {
+        return details;
+    }
+
+    public void setDetails(RecipeDetails details) {
+        this.details = details;
+    }*/
 }
