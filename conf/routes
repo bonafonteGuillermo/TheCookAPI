@@ -1,4 +1,4 @@
-POST        /recipe/:name                controllers.RecipeController.createRecipe(name)
+POST        /recipe                controllers.RecipeController.createRecipe()
 GET         /recipe/:id                  controllers.RecipeController.retrieveRecipe(id:Integer)
 PUT         /recipe/:id/:newName         controllers.RecipeController.updateRecipe(id:Integer,newName)
 DELETE      /recipe/:id                  controllers.RecipeController.deleteRecipe(id:Integer)

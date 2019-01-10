@@ -1,10 +1,18 @@
 package models;
 
+import play.data.validation.Constraints;
+
+import javax.validation.Constraint;
 import java.util.ArrayList;
 
 public class Recipe {
+
+    @Constraints.Required
     private Integer id;
+
+    @Constraints.Required
     private String name;
+
     private String imageURL;
     private ArrayList<Ingredient> ingredients = new ArrayList<Ingredient>();
 
