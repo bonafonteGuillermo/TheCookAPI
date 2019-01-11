@@ -2,7 +2,6 @@ package controllers;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import models.Recipe;
-import models.RecipeDetails;
 import play.data.Form;
 import play.data.FormFactory;
 import play.mvc.Controller;
@@ -14,6 +13,9 @@ import play.twirl.api.Content;
 import javax.inject.Inject;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
+
+import static utils.Utils.negociateContent;
 
 public class RecipeController extends Controller {
 
@@ -21,32 +23,24 @@ public class RecipeController extends Controller {
     FormFactory formFactory;
 
     public Result createRecipe() {
-
         Result result;
+        Optional<String> optional = request().contentType();
 
-        JsonNode jsonNode = request().body().asJson();
-        Form<Recipe> recipeForm = formFactory.form(Recipe.class).bind(jsonNode);
-        if (!recipeForm.hasErrors()){
+        if (optional.isPresent() && optional.get().equals(Http.MimeTypes.JSON)) {
+            JsonNode jsonNode = request().body().asJson();
+            Form<Recipe> recipeForm = formFactory.form(Recipe.class).bind(jsonNode);
 
-            Recipe recipe = recipeForm.get();
-            recipe.save();
-
-            if (request().accepts(Http.MimeTypes.JSON)) {
-                JsonNode json = play.libs.Json.toJson(recipe);
-                result = Results.ok(json)
-                        .as(Http.MimeTypes.JSON);
-
-            } else if (request().accepts(Http.MimeTypes.XML)) {
+            if (!recipeForm.hasErrors()) {
+                Recipe recipe = recipeForm.get();
+                recipe.save();
                 Content content = views.xml.recipe.render(recipe);
-                result = Results.ok(content)
-                        .as(Http.MimeTypes.XML);
-
+                JsonNode json = play.libs.Json.toJson(recipe);
+                result = negociateContent(json, content);
             } else {
-                result = Results.notAcceptable("Not Acceptable");
+                result = Results.badRequest(recipeForm.errorsAsJson());
             }
-
         }else{
-            result = Results.badRequest(recipeForm.errorsAsJson());
+            result = Results.notAcceptable("Not Acceptable");
         }
 
         return result;
@@ -54,27 +48,15 @@ public class RecipeController extends Controller {
 
     public Result retrieveRecipe(Integer recipeId) {
         Result result;
-
         Recipe recipe = Recipe.findById(recipeId.longValue());
 
-        if(recipe != null) {
-            if (request().accepts(Http.MimeTypes.JSON)) {
-                JsonNode json = play.libs.Json.toJson(recipe);
-                result = Results.ok(json)
-                        .as(Http.MimeTypes.JSON);
-
-            } else if (request().accepts(Http.MimeTypes.XML)) {
-                Content content = views.xml.recipe.render(recipe);
-                result = Results.ok(content)
-                        .as(Http.MimeTypes.XML);
-
-            } else {
-                result = Results.notAcceptable("Not Acceptable");
-            }
-        }else{
+        if (recipe != null) {
+            Content content = views.xml.recipe.render(recipe);
+            JsonNode json = play.libs.Json.toJson(recipe);
+            result = negociateContent(json, content);
+        } else {
             result = Results.notFound();
         }
-
         return result;
     }
 
@@ -87,13 +69,8 @@ public class RecipeController extends Controller {
     }
 
     public Result listRecipes() {
-
         Result result;
 
-/*
-        Recipe recipe1 = new Recipe("Macarrones", new ArrayList<>(), new RecipeDetails());
-        Recipe recipe2 = new Recipe("Paella", new ArrayList<>(), new RecipeDetails());
-*/
         Recipe recipe1 = new Recipe("Macarrones");
         Recipe recipe2 = new Recipe("Paella");
 
@@ -101,19 +78,10 @@ public class RecipeController extends Controller {
         recipeList.add(recipe1);
         recipeList.add(recipe2);
 
-        if (request().accepts(Http.MimeTypes.JSON)) {
-            JsonNode json = play.libs.Json.toJson(recipeList);
-            result = Results.ok(json)
-                    .as(Http.MimeTypes.JSON);
+        Content content = views.xml.recipes.render(recipeList);
+        JsonNode json = play.libs.Json.toJson(recipeList);
 
-        } else if (request().accepts(Http.MimeTypes.XML)) {
-            Content content = views.xml.recipes.render(recipeList);
-            result = Results.ok(content)
-                    .as(Http.MimeTypes.XML);
-
-        } else {
-            result = Results.notAcceptable("Not Acceptable");
-        }
+        result = negociateContent(json, content);
 
         return result;
     }
