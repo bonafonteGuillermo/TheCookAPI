@@ -1,9 +1,6 @@
 @(recipe: Recipe)
 <recipe>
     <id>@recipe.getId()</id>
-    <version>@recipe.getVersion()</version>
-    <whenCreated>@recipe.getWhenCreated()</whenCreated>
-    <whenUpdated>@recipe.getWhenUpdated()</whenUpdated>
     <name>@recipe.getName()</name>
     <recipeDetails>
         <imageURL>@recipe.getDetails().getImageURL()</imageURL>

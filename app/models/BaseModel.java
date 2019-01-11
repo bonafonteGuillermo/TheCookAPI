@@ -1,5 +1,6 @@
 package models;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import io.ebean.Model;
 import io.ebean.annotation.CreatedTimestamp;
 import io.ebean.annotation.UpdatedTimestamp;
@@ -16,12 +17,15 @@ public class BaseModel extends Model{
     private Long id;
 
     @Version
+    @JsonIgnore
     private Long version;
 
     @CreatedTimestamp
+    @JsonIgnore
     private Timestamp whenCreated;
 
     @UpdatedTimestamp
+    @JsonIgnore
     private Timestamp whenUpdated;
 
     public Long getId() {

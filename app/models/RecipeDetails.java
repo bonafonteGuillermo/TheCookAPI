@@ -1,5 +1,6 @@
 package models;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import io.ebean.Finder;
 import io.ebean.Model;
 
@@ -12,6 +13,7 @@ public class RecipeDetails extends Model {
 	public static final Finder<Long,RecipeDetails> find = new Finder<>(RecipeDetails.class);
 
 	@Id
+    @JsonIgnore
 	private Long id;
 	private String imageURL;
 	private String description;
