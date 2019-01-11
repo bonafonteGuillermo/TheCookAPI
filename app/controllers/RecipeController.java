@@ -33,6 +33,7 @@ public class RecipeController extends Controller {
             if (!recipeForm.hasErrors()) {
                 Recipe recipe = recipeForm.get();
                 recipe.save();
+
                 Content content = views.xml.recipe.render(recipe);
                 JsonNode json = play.libs.Json.toJson(recipe);
                 result = negotiateContent(json, content);
@@ -60,8 +61,21 @@ public class RecipeController extends Controller {
         return result;
     }
 
-    public Result updateRecipe(Integer id, String newName) {
-        return ok("Updated " + id + "/" + newName);
+    public Result updateRecipe(Integer recipeId, String newName) {
+        Result result;
+        Recipe recipe = Recipe.findById(recipeId.longValue());
+
+        if(recipe != null){
+            recipe.setName(newName);
+            recipe.update();
+
+            Content content = views.xml.recipe.render(recipe);
+            JsonNode json = play.libs.Json.toJson(recipe);
+            result = negotiateContent(json, content);
+        }else{
+            result = Results.notFound();
+        }
+        return result;
     }
 
     public Result deleteRecipe(Integer recipeId) {
