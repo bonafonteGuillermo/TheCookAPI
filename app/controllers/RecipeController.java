@@ -95,17 +95,15 @@ public class RecipeController extends Controller {
     public Result listRecipes() {
         Result result;
 
-        Recipe recipe1 = new Recipe("Macarrones");
-        Recipe recipe2 = new Recipe("Paella");
+        List<Recipe> recipeList = Recipe.findAll();
 
-        List<Recipe> recipeList = new ArrayList<>();
-        recipeList.add(recipe1);
-        recipeList.add(recipe2);
-
-        Content content = views.xml.recipes.render(recipeList);
-        JsonNode json = play.libs.Json.toJson(recipeList);
-
-        result = negotiateContent(json, content);
+        if(!recipeList.isEmpty()){
+            Content content = views.xml.recipes.render(recipeList);
+            JsonNode json = play.libs.Json.toJson(recipeList);
+            result = negotiateContent(json, content);
+        }else{
+            result = Results.notFound();
+        }
 
         return result;
     }

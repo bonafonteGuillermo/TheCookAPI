@@ -7,6 +7,7 @@ import play.data.validation.Constraints;
 import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
 import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 public class Recipe extends BaseModel {
@@ -35,11 +36,8 @@ public class Recipe extends BaseModel {
         return find.byId(id);
     }
 
-    public static Recipe findByName(String name) {
-        ExpressionList<Recipe> query = find.query().where().eq("name", name);
-        Recipe recipe = query.findOne();
-
-        return recipe;
+    public static List<Recipe> findAll() {
+        return find.query().findList();
     }
 
     public String getName() {
