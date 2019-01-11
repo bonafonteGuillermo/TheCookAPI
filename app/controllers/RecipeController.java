@@ -27,10 +27,24 @@ public class RecipeController extends Controller {
         JsonNode jsonNode = request().body().asJson();
         Form<Recipe> recipeForm = formFactory.form(Recipe.class).bind(jsonNode);
         if (!recipeForm.hasErrors()){
+
             Recipe recipe = recipeForm.get();
-            JsonNode jsonRecipe = play.libs.Json.toJson(recipe);
-            result = Results.ok(jsonRecipe)
-                    .as(Http.MimeTypes.JSON);
+            recipe.save();
+
+            if (request().accepts(Http.MimeTypes.JSON)) {
+                JsonNode json = play.libs.Json.toJson(recipe);
+                result = Results.ok(json)
+                        .as(Http.MimeTypes.JSON);
+
+            } else if (request().accepts(Http.MimeTypes.XML)) {
+                Content content = views.xml.recipe.render(recipe);
+                result = Results.ok(content)
+                        .as(Http.MimeTypes.XML);
+
+            } else {
+                result = Results.notAcceptable("Not Acceptable");
+            }
+
         }else{
             result = Results.badRequest(recipeForm.errorsAsJson());
         }
@@ -41,21 +55,24 @@ public class RecipeController extends Controller {
     public Result retrieveRecipe(Integer recipeId) {
         Result result;
 
-//        Recipe recipe = new Recipe("Macarrones", new ArrayList<>(), new RecipeDetails());
-        Recipe recipe = new Recipe("Macarrones");
+        Recipe recipe = Recipe.findById(recipeId.longValue());
 
-        if (request().accepts(Http.MimeTypes.JSON)) {
-            JsonNode json = play.libs.Json.toJson(recipe);
-            result = Results.ok(json)
-                    .as(Http.MimeTypes.JSON);
+        if(recipe != null) {
+            if (request().accepts(Http.MimeTypes.JSON)) {
+                JsonNode json = play.libs.Json.toJson(recipe);
+                result = Results.ok(json)
+                        .as(Http.MimeTypes.JSON);
 
-        } else if (request().accepts(Http.MimeTypes.XML)) {
-            Content content = views.xml.recipe.render(recipe);
-            result = Results.ok(content)
-                    .as(Http.MimeTypes.XML);
+            } else if (request().accepts(Http.MimeTypes.XML)) {
+                Content content = views.xml.recipe.render(recipe);
+                result = Results.ok(content)
+                        .as(Http.MimeTypes.XML);
 
-        } else {
-            result = Results.notAcceptable("Not Acceptable");
+            } else {
+                result = Results.notAcceptable("Not Acceptable");
+            }
+        }else{
+            result = Results.notFound();
         }
 
         return result;
