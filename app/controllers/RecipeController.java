@@ -79,7 +79,17 @@ public class RecipeController extends Controller {
     }
 
     public Result deleteRecipe(Integer recipeId) {
-        return ok("Deleted " + recipeId);
+        Result result;
+        Recipe recipe = Recipe.findById(recipeId.longValue());
+
+        if(recipe != null && recipe.delete()){
+                Content content = views.xml.recipe.render(recipe);
+                JsonNode json = play.libs.Json.toJson(recipe);
+                result = negotiateContent(json, content);
+        }else{
+            result = Results.notFound();
+        }
+        return result;
     }
 
     public Result listRecipes() {
