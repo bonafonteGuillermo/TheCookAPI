@@ -2,8 +2,10 @@ package controllers;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import models.Recipe;
+import models.RecipeDetails;
 import play.data.Form;
 import play.data.FormFactory;
+import play.db.ebean.Transactional;
 import play.mvc.Controller;
 import play.mvc.Http;
 import play.mvc.Result;
@@ -11,7 +13,6 @@ import play.mvc.Results;
 import play.twirl.api.Content;
 
 import javax.inject.Inject;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -22,6 +23,7 @@ public class RecipeController extends Controller {
     @Inject
     FormFactory formFactory;
 
+    @Transactional
     public Result createRecipe() {
         Result result;
         Optional<String> optional = request().contentType();
@@ -32,6 +34,8 @@ public class RecipeController extends Controller {
 
             if (!recipeForm.hasErrors()) {
                 Recipe recipe = recipeForm.get();
+                RecipeDetails recipeDetails = recipe.getRecipeDetails();
+                recipeDetails.save();
                 recipe.save();
 
                 Content content = views.xml.recipe.render(recipe);
@@ -83,9 +87,7 @@ public class RecipeController extends Controller {
         Recipe recipe = Recipe.findById(recipeId.longValue());
 
         if(recipe != null && recipe.delete()){
-                Content content = views.xml.recipe.render(recipe);
-                JsonNode json = play.libs.Json.toJson(recipe);
-                result = negotiateContent(json, content);
+                result = ok();
         }else{
             result = Results.notFound();
         }

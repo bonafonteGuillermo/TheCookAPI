@@ -1,9 +1,18 @@
 package models;
 
+import io.ebean.Finder;
+import io.ebean.Model;
+
 import javax.persistence.Entity;
+import javax.persistence.Id;
 
 @Entity
-public class RecipeDetails extends BaseModel{
+public class RecipeDetails extends Model {
+
+	public static final Finder<Long,RecipeDetails> find = new Finder<>(RecipeDetails.class);
+
+	@Id
+	private Long id;
 	private String imageURL;
 	private String description;
 
@@ -13,6 +22,18 @@ public class RecipeDetails extends BaseModel{
 	public RecipeDetails(String imageURL, String description) {
 		this.imageURL = imageURL;
 		this.description = description;
+	}
+
+	public static RecipeDetails findById(Long id) {
+		return find.byId(id);
+	}
+
+	public Long getId() {
+		return id;
+	}
+
+	public void setId(Long id) {
+		this.id = id;
 	}
 
 	public String getImageURL() {

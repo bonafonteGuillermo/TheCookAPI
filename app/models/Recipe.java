@@ -1,12 +1,11 @@
 package models;
 
-import io.ebean.ExpressionList;
 import io.ebean.Finder;
 import play.data.validation.Constraints;
 
-import javax.persistence.EmbeddedId;
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
-import java.util.ArrayList;
+import javax.persistence.OneToOne;
 import java.util.List;
 
 @Entity
@@ -16,20 +15,22 @@ public class Recipe extends BaseModel {
 
     @Constraints.Required
     private String name;
-    /*private ArrayList<Ingredient> ingredients = new ArrayList<>();
-    private RecipeDetails details;*/
+    /*private ArrayList<Ingredient> ingredients = new ArrayList<>();*/
+    @OneToOne(cascade = CascadeType.ALL)
+    private RecipeDetails recipeDetails;
 
     public Recipe() {
     }
 
-    public Recipe(String name) {
+    public Recipe(String name, RecipeDetails recipeDetails) {
         this.name = name;
+        this.recipeDetails = recipeDetails;
     }
 
-    /*public Recipe(String name, ArrayList<Ingredient> ingredients, RecipeDetails details) {
+    /*public Recipe(String name, ArrayList<Ingredient> ingredients, RecipeDetails recipeDetails) {
         this.name = name;
         this.ingredients = ingredients;
-        this.details = details;
+        this.recipeDetails = recipeDetails;
     }*/
 
     public static Recipe findById(Long id) {
@@ -54,13 +55,13 @@ public class Recipe extends BaseModel {
 
     public void setIngredients(ArrayList<Ingredient> ingredients) {
         this.ingredients = ingredients;
-    }
-
-    public RecipeDetails getDetails() {
-        return details;
-    }
-
-    public void setDetails(RecipeDetails details) {
-        this.details = details;
     }*/
+
+    public RecipeDetails getRecipeDetails() {
+        return recipeDetails;
+    }
+
+    public void setRecipeDetails(RecipeDetails recipeDetails) {
+        this.recipeDetails = recipeDetails;
+    }
 }

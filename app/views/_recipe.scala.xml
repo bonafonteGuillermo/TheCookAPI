@@ -5,4 +5,8 @@
     <whenCreated>@recipe.getWhenCreated()</whenCreated>
     <whenUpdated>@recipe.getWhenUpdated()</whenUpdated>
     <name>@recipe.getName()</name>
+    <recipeDetails>
+        <imageURL>@recipe.getDetails().getImageURL()</imageURL>
+        <description>@recipe.getDetails().getDescription()</description>
+    </recipeDetails>
 </recipe>
