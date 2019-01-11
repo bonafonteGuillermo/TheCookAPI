@@ -15,7 +15,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-import static utils.Utils.negociateContent;
+import static utils.Utils.negotiateContent;
 
 public class RecipeController extends Controller {
 
@@ -35,11 +35,11 @@ public class RecipeController extends Controller {
                 recipe.save();
                 Content content = views.xml.recipe.render(recipe);
                 JsonNode json = play.libs.Json.toJson(recipe);
-                result = negociateContent(json, content);
+                result = negotiateContent(json, content);
             } else {
                 result = Results.badRequest(recipeForm.errorsAsJson());
             }
-        }else{
+        } else {
             result = Results.notAcceptable("Not Acceptable");
         }
 
@@ -53,7 +53,7 @@ public class RecipeController extends Controller {
         if (recipe != null) {
             Content content = views.xml.recipe.render(recipe);
             JsonNode json = play.libs.Json.toJson(recipe);
-            result = negociateContent(json, content);
+            result = negotiateContent(json, content);
         } else {
             result = Results.notFound();
         }
@@ -81,7 +81,7 @@ public class RecipeController extends Controller {
         Content content = views.xml.recipes.render(recipeList);
         JsonNode json = play.libs.Json.toJson(recipeList);
 
-        result = negociateContent(json, content);
+        result = negotiateContent(json, content);
 
         return result;
     }
