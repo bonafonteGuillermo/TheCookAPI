@@ -3,7 +3,7 @@
     <id>@recipe.getId()</id>
     <name>@recipe.getName()</name>
     <recipeDetails>
-        <imageURL>@recipe.getDetails().getImageURL()</imageURL>
-        <description>@recipe.getDetails().getDescription()</description>
+        <imageURL>@recipe.getRecipeDetails().getImageURL()</imageURL>
+        <description>@recipe.getRecipeDetails().getDescription()</description>
     </recipeDetails>
 </recipe>
