@@ -1,29 +1,43 @@
 package models;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import io.ebean.ExpressionList;
+import io.ebean.Finder;
 
-import javax.persistence.CascadeType;
-import javax.persistence.EmbeddedId;
-import javax.persistence.Entity;
-import javax.persistence.OneToMany;
-import java.util.ArrayList;
+import javax.persistence.*;
 
 @Entity
 public class Type extends BaseModel{
 
+    public static final Finder<Long,Type> find = new Finder<>(Type.class);
+
     @EmbeddedId
     private String name;
 
-    @OneToMany(cascade = CascadeType.ALL, mappedBy= "type")
-    @JsonIgnore
-    public ArrayList<Ingredient> ingredients;
+    /*@OneToMany(cascade = CascadeType.ALL, mappedBy= "type")
+    @JsonBackReference
+    public Ingredient ingredient;*/
 
     public Type() {
     }
 
-    public Type(String name, ArrayList<Ingredient> ingredients) {
+    public Type(String name) {
         this.name = name;
-        this.ingredients = ingredients;
+    }
+
+    /*public Type(String name, Ingredient ingredient) {
+        this.name = name;
+        this.ingredient = ingredient;
+    }*/
+
+    public static Type findById(Long id) {
+        return find.byId(id);
+    }
+
+    public static Type findByName(String name) {
+        ExpressionList<Type> query = find.query().where().eq("name", name);
+        Type type = query.findOne();
+        return type;
     }
 
     public String getName() {
@@ -34,11 +48,11 @@ public class Type extends BaseModel{
         this.name = name;
     }
 
-    public ArrayList<Ingredient> getIngredients() {
-        return ingredients;
+   /* public Ingredient getIngredient() {
+        return ingredient;
     }
 
-    public void setIngredients(ArrayList<Ingredient> ingredients) {
-        this.ingredients = ingredients;
-    }
+    public void setIngredient(Ingredient ingredient) {
+        this.ingredient = ingredient;
+    }*/
 }
