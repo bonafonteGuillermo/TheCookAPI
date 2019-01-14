@@ -1,13 +1,17 @@
 package models;
 
-import javax.persistence.CascadeType;
+import play.data.validation.Constraints;
+
 import javax.persistence.Entity;
 import javax.persistence.ManyToOne;
 
 @Entity
 public class Ingredient extends BaseModel{
-	private String name;
 
+    @Constraints.Required
+    private String name;
+
+    @Constraints.Required
 	@ManyToOne
 	private Type type;
 

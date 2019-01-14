@@ -1,6 +1,9 @@
 package models;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.CascadeType;
+import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
 import javax.persistence.OneToMany;
 import java.util.ArrayList;
@@ -8,9 +11,11 @@ import java.util.ArrayList;
 @Entity
 public class Type extends BaseModel{
 
+    @EmbeddedId
     private String name;
 
     @OneToMany(cascade = CascadeType.ALL, mappedBy= "type")
+    @JsonIgnore
     public ArrayList<Ingredient> ingredients;
 
     public Type() {
