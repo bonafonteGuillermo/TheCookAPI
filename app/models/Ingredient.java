@@ -1,10 +1,14 @@
 package models;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
+import javax.persistence.ManyToOne;
 
 @Entity
 public class Ingredient extends BaseModel{
 	private String name;
+
+	@ManyToOne
 	private Type type;
 
     public Ingredient() {

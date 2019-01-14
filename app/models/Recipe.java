@@ -1,5 +1,6 @@
 package models;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import io.ebean.Finder;
 import play.data.validation.Constraints;
 
@@ -17,6 +18,7 @@ public class Recipe extends BaseModel {
     private String name;
     /*private ArrayList<Ingredient> ingredients = new ArrayList<>();*/
     @OneToOne(cascade = CascadeType.ALL)
+    @JsonBackReference
     private RecipeDetails recipeDetails;
 
     public Recipe() {
