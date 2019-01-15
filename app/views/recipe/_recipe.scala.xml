@@ -2,6 +2,12 @@
 <recipe>
     <id>@recipe.getId()</id>
     <name>@recipe.getName()</name>
+    <ingredients>@for(ingredient <- recipe.getIngredients()) {
+        <ingredient>
+            <id>@ingredient.getId()</id>
+            <name>@ingredient.getName()</name>
+        </ingredient>}
+    </ingredients>
     <recipeDetails>
         <imageURL>@recipe.getRecipeDetails().getImageURL()</imageURL>
         <description>@recipe.getRecipeDetails().getDescription()</description>

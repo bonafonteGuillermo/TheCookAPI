@@ -54,7 +54,7 @@ public class RecipeController extends Controller {
                 recipeDetails.save();
                 recipe.save();
 
-                Content content = views.xml.recipe.render(recipe);
+                Content content = views.xml.recipe.recipe.render(recipe);
                 JsonNode json = play.libs.Json.toJson(recipe);
                 result = negotiateContent(json, content);
             } else {
@@ -72,7 +72,7 @@ public class RecipeController extends Controller {
         Recipe recipe = Recipe.findById(recipeId.longValue());
 
         if (recipe != null) {
-            Content content = views.xml.recipe.render(recipe);
+            Content content = views.xml.recipe.recipe.render(recipe);
             JsonNode json = play.libs.Json.toJson(recipe);
             result = negotiateContent(json, content);
         } else {
@@ -89,7 +89,7 @@ public class RecipeController extends Controller {
             recipe.setName(newName);
             recipe.update();
 
-            Content content = views.xml.recipe.render(recipe);
+            Content content = views.xml.recipe.recipe.render(recipe);
             JsonNode json = play.libs.Json.toJson(recipe);
             result = negotiateContent(json, content);
         }else{
@@ -116,7 +116,7 @@ public class RecipeController extends Controller {
         List<Recipe> recipeList = Recipe.findAll();
 
         if(!recipeList.isEmpty()){
-            Content content = views.xml.recipes.render(recipeList);
+            Content content = views.xml.recipe.recipes.render(recipeList);
             JsonNode json = play.libs.Json.toJson(recipeList);
             result = negotiateContent(json, content);
         }else{
