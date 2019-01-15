@@ -1,6 +1,5 @@
 package models;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import io.ebean.Finder;
 import play.data.validation.Constraints;
@@ -21,18 +20,19 @@ public class Recipe extends BaseModel {
     private String name;
 
     @ManyToMany(cascade = CascadeType.ALL)
-    private ArrayList<Ingredient> ingredients = new ArrayList<>();
+    @JsonManagedReference
+    private List<Ingredient> ingredients = new ArrayList<>();
 
     @OneToOne(cascade = CascadeType.ALL)
+    @JsonManagedReference
     private RecipeDetails recipeDetails;
 
     public Recipe() {
+        super();
     }
 
-    public Recipe(String name, ArrayList<Ingredient> ingredients, RecipeDetails recipeDetails) {
+    public Recipe(String name) {
         this.name = name;
-        this.ingredients = ingredients;
-        this.recipeDetails = recipeDetails;
     }
 
     public static Recipe findById(Long id) {
@@ -51,11 +51,15 @@ public class Recipe extends BaseModel {
         this.name = name;
     }
 
-    public ArrayList<Ingredient> getIngredients() {
+    public static Finder<Long, Recipe> getFind() {
+        return find;
+    }
+
+    public List<Ingredient> getIngredients() {
         return ingredients;
     }
 
-    public void setIngredients(ArrayList<Ingredient> ingredients) {
+    public void setIngredients(List<Ingredient> ingredients) {
         this.ingredients = ingredients;
     }
 
@@ -69,6 +73,6 @@ public class Recipe extends BaseModel {
 
     public void addIngredient(Ingredient ingredient){
         this.ingredients.add(ingredient);
+        ingredient.getRecipes().add(this);
     }
-
 }

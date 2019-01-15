@@ -4,7 +4,6 @@ import com.fasterxml.jackson.databind.JsonNode;
 import models.Ingredient;
 import models.Recipe;
 import models.RecipeDetails;
-import models.Type;
 import play.data.Form;
 import play.data.FormFactory;
 import play.db.ebean.Transactional;
@@ -38,15 +37,17 @@ public class RecipeController extends Controller {
             if (!recipeForm.hasErrors()) {
                 Recipe recipe = recipeForm.get();
                 RecipeDetails recipeDetails = recipe.getRecipeDetails();
-                ArrayList<Ingredient> ingredientsToCreate = recipe.getIngredients();
+                List<Ingredient> ingredientsToCreate = recipe.getIngredients();
+
+                recipe.setIngredients(new ArrayList<>());
 
                 for (Ingredient ingredientToCreate: ingredientsToCreate) {
                     Ingredient ingredientInDB = Ingredient.findByName(ingredientToCreate.getName());
-                    if(ingredientInDB != null){
+                    if (ingredientInDB != null) {
                         recipe.addIngredient(ingredientInDB);
                     }else{
-                        recipe.addIngredient(ingredientInDB);
                         ingredientToCreate.save();
+                        recipe.addIngredient(ingredientToCreate);
                     }
                 }
 

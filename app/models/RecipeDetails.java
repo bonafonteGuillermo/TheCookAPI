@@ -18,14 +18,6 @@ public class RecipeDetails extends Model {
 	private String imageURL;
 	private String description;
 
-	public RecipeDetails() {
-	}
-
-	public RecipeDetails(String imageURL, String description) {
-		this.imageURL = imageURL;
-		this.description = description;
-	}
-
 	public static RecipeDetails findById(Long id) {
 		return find.byId(id);
 	}

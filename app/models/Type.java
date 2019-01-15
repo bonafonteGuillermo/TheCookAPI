@@ -18,18 +18,6 @@ public class Type extends BaseModel{
     @JsonBackReference
     public Ingredient ingredient;*/
 
-    public Type() {
-    }
-
-    public Type(String name) {
-        this.name = name;
-    }
-
-    /*public Type(String name, Ingredient ingredient) {
-        this.name = name;
-        this.ingredient = ingredient;
-    }*/
-
     public static Type findById(Long id) {
         return find.byId(id);
     }

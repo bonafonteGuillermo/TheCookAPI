@@ -4,6 +4,10 @@ PUT         /recipe/:id/:newName         controllers.RecipeController.updateReci
 DELETE      /recipe/:id                  controllers.RecipeController.deleteRecipe(id:Integer)
 GET         /recipes                     controllers.RecipeController.listRecipes
 
+#TODO CRUD de type
+
+#TODO CRUD de ingredients
+
 #TODO search using diferent criteria.
 
 # Map static resources from the /public folder to the /assets URL path
