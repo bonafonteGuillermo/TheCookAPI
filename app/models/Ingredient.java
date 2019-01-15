@@ -1,6 +1,7 @@
 package models;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import io.ebean.ExpressionList;
 import io.ebean.Finder;
 
@@ -23,9 +24,8 @@ public class Ingredient extends BaseModel{
     private List<Recipe> recipes = new ArrayList<>();
 
 	@ManyToOne
-	@JsonBackReference
 	private Type type;
-
+    @JsonManagedReference
     public static Ingredient findById(Long id) {
         return find.byId(id);
     }

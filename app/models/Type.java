@@ -1,5 +1,7 @@
 package models;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import io.ebean.ExpressionList;
 import io.ebean.Finder;
@@ -18,7 +20,7 @@ public class Type extends BaseModel{
     private String name;
 
     @OneToMany(cascade = CascadeType.ALL, mappedBy= "type")
-    @JsonManagedReference
+    @JsonBackReference
     public Ingredient ingredient;
 
     public static Type findById(Long id) {
