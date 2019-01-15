@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.JsonNode;
 import models.Ingredient;
 import models.Recipe;
 import models.RecipeDetails;
+import models.Type;
 import play.data.Form;
 import play.data.FormFactory;
 import play.db.ebean.Transactional;
@@ -41,16 +42,20 @@ public class RecipeController extends Controller {
 
                 recipe.setIngredients(new ArrayList<>());
 
-                for (Ingredient ingredientToCreate: ingredientsToCreate) {
+                for (Ingredient ingredientToCreate : ingredientsToCreate) {
                     Ingredient ingredientInDB = Ingredient.findByName(ingredientToCreate.getName());
                     if (ingredientInDB != null) {
                         recipe.addIngredient(ingredientInDB);
-                    }else{
+                    } else {
+                        Type type = ingredientToCreate.getType();
+                        Type typeToCreate = Type.findByName(type.getName());
+                        if(typeToCreate == null){
+                            type.save();
+                        }
                         ingredientToCreate.save();
                         recipe.addIngredient(ingredientToCreate);
                     }
                 }
-
                 recipeDetails.save();
                 recipe.save();
 
@@ -63,7 +68,6 @@ public class RecipeController extends Controller {
         } else {
             result = Results.notAcceptable("Not Acceptable");
         }
-
         return result;
     }
 
@@ -85,14 +89,14 @@ public class RecipeController extends Controller {
         Result result;
         Recipe recipe = Recipe.findById(recipeId.longValue());
 
-        if(recipe != null){
+        if (recipe != null) {
             recipe.setName(newName);
             recipe.update();
 
             Content content = views.xml.recipe.recipe.render(recipe);
             JsonNode json = play.libs.Json.toJson(recipe);
             result = negotiateContent(json, content);
-        }else{
+        } else {
             result = Results.notFound();
         }
         return result;
@@ -102,9 +106,9 @@ public class RecipeController extends Controller {
         Result result;
         Recipe recipe = Recipe.findById(recipeId.longValue());
 
-        if(recipe != null && recipe.delete()){
-                result = ok();
-        }else{
+        if (recipe != null && recipe.delete()) {
+            result = ok();
+        } else {
             result = Results.notFound();
         }
         return result;
@@ -115,11 +119,11 @@ public class RecipeController extends Controller {
 
         List<Recipe> recipeList = Recipe.findAll();
 
-        if(!recipeList.isEmpty()){
+        if (!recipeList.isEmpty()) {
             Content content = views.xml.recipe.recipes.render(recipeList);
             JsonNode json = play.libs.Json.toJson(recipeList);
             result = negotiateContent(json, content);
-        }else{
+        } else {
             result = Results.notFound();
         }
 

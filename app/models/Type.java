@@ -1,10 +1,13 @@
 package models;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import io.ebean.ExpressionList;
 import io.ebean.Finder;
 
-import javax.persistence.*;
+import javax.persistence.CascadeType;
+import javax.persistence.EmbeddedId;
+import javax.persistence.Entity;
+import javax.persistence.OneToMany;
 
 @Entity
 public class Type extends BaseModel{
@@ -14,9 +17,9 @@ public class Type extends BaseModel{
     @EmbeddedId
     private String name;
 
-    /*@OneToMany(cascade = CascadeType.ALL, mappedBy= "type")
-    @JsonBackReference
-    public Ingredient ingredient;*/
+    @OneToMany(cascade = CascadeType.ALL, mappedBy= "type")
+    @JsonManagedReference
+    public Ingredient ingredient;
 
     public static Type findById(Long id) {
         return find.byId(id);
@@ -36,11 +39,11 @@ public class Type extends BaseModel{
         this.name = name;
     }
 
-   /* public Ingredient getIngredient() {
+    public Ingredient getIngredient() {
         return ingredient;
     }
 
     public void setIngredient(Ingredient ingredient) {
         this.ingredient = ingredient;
-    }*/
+    }
 }

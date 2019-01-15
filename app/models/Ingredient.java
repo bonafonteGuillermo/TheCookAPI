@@ -7,6 +7,7 @@ import io.ebean.Finder;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.ManyToMany;
+import javax.persistence.ManyToOne;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -21,10 +22,9 @@ public class Ingredient extends BaseModel{
     @JsonBackReference
     private List<Recipe> recipes = new ArrayList<>();
 
-    /*
 	@ManyToOne
 	@JsonBackReference
-	private Type type;*/
+	private Type type;
 
     public static Ingredient findById(Long id) {
         return find.byId(id);
@@ -52,11 +52,12 @@ public class Ingredient extends BaseModel{
         this.recipes = recipes;
     }
 
-    /*public Type getType() {
+    public Type getType() {
         return type;
     }
 
     public void setType(Type type) {
         this.type = type;
-    }*/
+//        type.ingredient=this;
+    }
 }
