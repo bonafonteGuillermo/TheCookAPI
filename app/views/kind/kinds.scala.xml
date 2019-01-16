@@ -1,0 +1,7 @@
+@(kinds: List[Kind])
+        <?xml version="1.0" encoding="UTF-8"?>
+<kinds>
+    @for(kind <- kinds) {
+    @_kind(kind)
+    }
+</kinds>

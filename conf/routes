@@ -1,14 +1,24 @@
-POST        /recipe                      controllers.RecipeController.createRecipe()
-GET         /recipe/:id                  controllers.RecipeController.retrieveRecipe(id:Integer)
-PUT         /recipe/:id/:newName         controllers.RecipeController.updateRecipe(id:Integer,newName)
-DELETE      /recipe/:id                  controllers.RecipeController.deleteRecipe(id:Integer)
-GET         /recipes                     controllers.RecipeController.listRecipes
+#*************************************************
+#/******************  RECIPES  *******************
+#*************************************************
+POST        /recipe                     controllers.RecipeController.createRecipe()
+GET         /recipe/:id                 controllers.RecipeController.retrieveRecipe(id:Integer)
+PUT         /recipe/:id/:newName        controllers.RecipeController.updateRecipe(id:Integer,newName)
+DELETE      /recipe/:id                 controllers.RecipeController.deleteRecipe(id:Integer)
+GET         /recipes                    controllers.RecipeController.listRecipes
 
-#TODO CRUD de type
 
-#TODO CRUD de ingredients
+#*************************************************
+#/****************  INGREDIENTS  *****************
+#*************************************************
+GET         /ingredients                controllers.IngredientController.listIngredients
 
-#TODO search using diferent criteria.
+
+#*************************************************
+#/*******************  KIND  *********************
+#*************************************************
+GET         /kinds                      controllers.KindController.listKinds
+
 
 # Map static resources from the /public folder to the /assets URL path
-GET     /assets/*file               controllers.Assets.versioned(path="/public", file: Asset)
+GET         /assets/*file               controllers.Assets.versioned(path="/public", file: Asset)

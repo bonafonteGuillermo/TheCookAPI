@@ -1,11 +1,9 @@
 package models;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 import io.ebean.ExpressionList;
 import io.ebean.Finder;
 
-import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
@@ -24,8 +22,7 @@ public class Ingredient extends BaseModel{
     private List<Recipe> recipes = new ArrayList<>();
 
 	@ManyToOne
-	private Type type;
-    @JsonManagedReference
+	private Kind kind;
     public static Ingredient findById(Long id) {
         return find.byId(id);
     }
@@ -34,6 +31,10 @@ public class Ingredient extends BaseModel{
         ExpressionList<Ingredient> query = find.query().where().eq("name", name);
         Ingredient ingredient = query.findOne();
         return ingredient;
+    }
+
+    public static List<Ingredient> findAll() {
+        return find.query().findList();
     }
 
     public String getName() {
@@ -52,12 +53,12 @@ public class Ingredient extends BaseModel{
         this.recipes = recipes;
     }
 
-    public Type getType() {
-        return type;
+    public Kind getKind() {
+        return kind;
     }
 
-    public void setType(Type type) {
-        this.type = type;
-//        type.ingredient=this;
+    public void setKind(Kind kind) {
+        this.kind = kind;
+        kind.ingredient=this;
     }
 }

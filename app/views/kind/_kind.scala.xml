@@ -1,0 +1,5 @@
+@(kind: Kind)
+<kind>
+    <id>@kind.getId()</id>
+    <name>@kind.getName()</name>
+</kind>
