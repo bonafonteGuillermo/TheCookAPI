@@ -144,4 +144,20 @@ public class RecipeController extends Controller {
 
         return result;
     }
+
+    public Result listRecipesWithIngredient(String ingredient){
+        Result result;
+
+        List<Recipe> recipeList = Recipe.findByIngredient(ingredient);
+
+        if (!recipeList.isEmpty()) {
+            Content content = views.xml.recipe.recipes.render(recipeList);
+            JsonNode json = play.libs.Json.toJson(recipeList);
+            result = negotiateContent(json, content);
+        } else {
+            result = Results.notFound();
+        }
+
+        return result;
+    }
 }

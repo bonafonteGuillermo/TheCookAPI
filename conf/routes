@@ -7,6 +7,7 @@ PUT         /recipe/:id/:newName        controllers.RecipeController.updateRecip
 DELETE      /recipe/:id                 controllers.RecipeController.deleteRecipe(id:Integer)
 DELETE      /recipes                    controllers.RecipeController.deleteAllRecipes
 GET         /recipes                    controllers.RecipeController.listRecipes
+GET         /recipes/:ingredient        controllers.RecipeController.listRecipesWithIngredient(ingredient)
 
 
 #*************************************************
