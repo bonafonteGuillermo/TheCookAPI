@@ -1,6 +1,7 @@
 package models;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import io.ebean.Ebean;
 import io.ebean.ExpressionList;
 import io.ebean.Finder;
 
@@ -34,6 +35,10 @@ public class Kind extends BaseModel{
 
     public static List<Kind> findAll() {
         return find.query().findList();
+    }
+
+    public static int deleteAll(){
+        return Ebean.deleteAll(find.all());
     }
 
     public String getName() {

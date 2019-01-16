@@ -2,6 +2,7 @@ package controllers;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import models.Kind;
+import models.Recipe;
 import play.mvc.Controller;
 import play.mvc.Result;
 import play.mvc.Results;
@@ -26,6 +27,30 @@ public class KindController extends Controller {
             result = Results.notFound();
         }
 
+        return result;
+    }
+
+    public Result deleteKind(Integer kindId) {
+        Result result;
+        Kind kind = Kind.findById(kindId.longValue());
+
+        if (kind != null && kind.delete()) {
+            result = ok();
+        } else {
+            result = Results.notFound();
+        }
+        return result;
+    }
+
+    public Result deleteAllKinds() {
+        Result result;
+        int affectedRows = Kind.deleteAll();
+
+        if (affectedRows != 0) {
+            result = ok();
+        } else {
+            result = Results.notFound();
+        }
         return result;
     }
 }

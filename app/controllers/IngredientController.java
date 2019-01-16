@@ -28,4 +28,16 @@ public class IngredientController extends Controller{
 
         return result;
     }
+
+    public Result deleteAllIngredients() {
+        Result result;
+        int affectedRows = Ingredient.deleteAll();
+
+        if (affectedRows != 0) {
+            result = ok();
+        } else {
+            result = Results.notFound();
+        }
+        return result;
+    }
 }

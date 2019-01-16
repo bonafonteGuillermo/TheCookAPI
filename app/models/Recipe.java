@@ -1,6 +1,7 @@
 package models;
 
 import com.fasterxml.jackson.annotation.JsonManagedReference;
+import io.ebean.Ebean;
 import io.ebean.Finder;
 import play.data.validation.Constraints;
 
@@ -41,6 +42,10 @@ public class Recipe extends BaseModel {
 
     public static List<Recipe> findAll() {
         return find.query().findList();
+    }
+
+    public static int deleteAll(){
+        return Ebean.deleteAll(find.all());
     }
 
     public String getName() {

@@ -2,6 +2,7 @@ package controllers;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import models.Ingredient;
+import models.Kind;
 import models.Recipe;
 import models.RecipeDetails;
 import play.data.Form;
@@ -46,12 +47,12 @@ public class RecipeController extends Controller {
                     if (ingredientInDB != null) {
                         recipe.addIngredient(ingredientInDB);
                     } else {
-                        /*Kind type = ingredientToCreate.getKind();
+                        Kind type = ingredientToCreate.getKind();
                         Kind typeToCreate = Kind.findByName(type.getName());
                         if(typeToCreate == null){
                             type.save();
                             ingredientToCreate.setKind(type);
-                        }*/
+                        }
                         ingredientToCreate.save();
                         recipe.addIngredient(ingredientToCreate);
                     }
@@ -107,6 +108,18 @@ public class RecipeController extends Controller {
         Recipe recipe = Recipe.findById(recipeId.longValue());
 
         if (recipe != null && recipe.delete()) {
+            result = ok();
+        } else {
+            result = Results.notFound();
+        }
+        return result;
+    }
+
+    public Result deleteAllRecipes() {
+        Result result;
+        int affectedRows = Recipe.deleteAll();
+
+        if (affectedRows != 0) {
             result = ok();
         } else {
             result = Results.notFound();

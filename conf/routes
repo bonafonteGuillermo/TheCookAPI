@@ -5,6 +5,7 @@ POST        /recipe                     controllers.RecipeController.createRecip
 GET         /recipe/:id                 controllers.RecipeController.retrieveRecipe(id:Integer)
 PUT         /recipe/:id/:newName        controllers.RecipeController.updateRecipe(id:Integer,newName)
 DELETE      /recipe/:id                 controllers.RecipeController.deleteRecipe(id:Integer)
+DELETE      /recipes                    controllers.RecipeController.deleteAllRecipes
 GET         /recipes                    controllers.RecipeController.listRecipes
 
 
@@ -12,12 +13,14 @@ GET         /recipes                    controllers.RecipeController.listRecipes
 #/****************  INGREDIENTS  *****************
 #*************************************************
 GET         /ingredients                controllers.IngredientController.listIngredients
+DELETE      /ingredients                controllers.IngredientController.deleteAllIngredients
 
 
 #*************************************************
 #/*******************  KIND  *********************
 #*************************************************
 GET         /kinds                      controllers.KindController.listKinds
+DELETE      /kinds                      controllers.KindController.deleteAllKinds
 
 
 # Map static resources from the /public folder to the /assets URL path
