@@ -67,5 +67,6 @@ public class Ingredient extends BaseModel{
 
     public void setKind(Kind kind) {
         this.kind = kind;
+        kind.getIngredient().add(this);
     }
 }

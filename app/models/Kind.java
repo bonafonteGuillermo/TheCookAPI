@@ -18,7 +18,6 @@ public class Kind extends BaseModel{
 
     public static final Finder<Long, Kind> find = new Finder<>(Kind.class);
 
-    @EmbeddedId
     private String name;
 
     @OneToMany(cascade = CascadeType.ALL, mappedBy= "kind")
