@@ -1,6 +1,8 @@
 package models;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import io.ebean.Ebean;
 import io.ebean.ExpressionList;
 import io.ebean.Finder;
@@ -21,7 +23,7 @@ public class Kind extends BaseModel{
 
     @OneToMany(cascade = CascadeType.ALL, mappedBy= "kind")
     @JsonBackReference
-    public Ingredient ingredient;
+    public List<Ingredient> ingredient;
 
     public static Kind findById(Long id) {
         return find.byId(id);
@@ -49,11 +51,11 @@ public class Kind extends BaseModel{
         this.name = name;
     }
 
-    public Ingredient getIngredient() {
+    public List<Ingredient> getIngredient() {
         return ingredient;
     }
 
-    public void setIngredient(Ingredient ingredient) {
+    public void setIngredient(List<Ingredient> ingredient) {
         this.ingredient = ingredient;
     }
 }

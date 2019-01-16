@@ -47,11 +47,13 @@ public class RecipeController extends Controller {
                     if (ingredientInDB != null) {
                         recipe.addIngredient(ingredientInDB);
                     } else {
-                        Kind type = ingredientToCreate.getKind();
-                        Kind typeToCreate = Kind.findByName(type.getName());
-                        if(typeToCreate == null){
-                            type.save();
-                            ingredientToCreate.setKind(type);
+                        Kind typeToCreate = ingredientToCreate.getKind();
+                        Kind typeInDB = Kind.findByName(typeToCreate.getName());
+                        if(typeInDB != null){
+                            ingredientToCreate.setKind(typeInDB);
+                        }else{
+                            typeToCreate.save();
+                            ingredientToCreate.setKind(typeToCreate);
                         }
                         ingredientToCreate.save();
                         recipe.addIngredient(ingredientToCreate);
