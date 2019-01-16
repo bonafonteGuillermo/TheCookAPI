@@ -9,6 +9,13 @@ DELETE      /recipes                    controllers.RecipeController.deleteAllRe
 GET         /recipes                    controllers.RecipeController.listRecipes
 GET         /recipes/:ingredient        controllers.RecipeController.listRecipesWithIngredient(ingredient)
 
+GET         /recipes/:ingredientKind    controllers.RecipeController.listRecipesWithIngredientKind(ingredientKind)
+# Pagination links, like /clients?page=3
+
+GET   /clients              controllers.Clients.list(page: Int ?= 1)
+# The version parameter is optional. E.g. /api/list-all?version=3.0
+GET   /api/list-all         controllers.Api.list(version: Option[String])
+
 
 #*************************************************
 #/****************  INGREDIENTS  *****************

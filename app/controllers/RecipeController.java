@@ -160,4 +160,20 @@ public class RecipeController extends Controller {
 
         return result;
     }
+
+    public Result listRecipesWithIngredientKind(String kind){
+        Result result;
+
+        List<Recipe> recipeList = Recipe.findByIngredientKind(kind);
+
+        if (!recipeList.isEmpty()) {
+            Content content = views.xml.recipe.recipes.render(recipeList);
+            JsonNode json = play.libs.Json.toJson(recipeList);
+            result = negotiateContent(json, content);
+        } else {
+            result = Results.notFound();
+        }
+
+        return result;
+    }
 }

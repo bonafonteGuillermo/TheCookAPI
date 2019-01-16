@@ -46,13 +46,23 @@ public class Recipe extends BaseModel {
     }
 
     public static List<Recipe> findByIngredient(String ingredient){
-        String sql = "SELECT r.id, r.name " +
-                        "FROM recipe as r, " +
-                        "ingredient AS i, " +
-                        "recipe_ingredient as x " +
-                            "WHERE x.recipe_id=r.id " +
-                            "and x.ingredient_id=i.id " +
-                            "and i.name LIKE \'"+ingredient+"\'";
+        String sql = "SELECT R.id, R.name " +
+                        "FROM recipe as R, ingredient AS I, recipe_ingredient as X " +
+                            "WHERE X.recipe_id = R.id " +
+                            "and X.ingredient_id = I.id " +
+                            "and I.name LIKE \'"+ingredient+"\'";
+
+        List<Recipe> recipeList = find.nativeSql(sql).findList();
+        return recipeList;
+    }
+
+    public static List<Recipe> findByIngredientKind(String kind){
+        String sql = "SELECT DISTINCT R.id, R.name " +
+                        "FROM recipe as R, ingredient AS I, recipe_ingredient as X, kind as K " +
+                        "WHERE X.recipe_id = R.id " +
+                        "and X.ingredient_id = I.id " +
+                        "and I.kind_id = K.id " +
+                        "and K.name LIKE \'"+kind+"\'";
 
         List<Recipe> recipeList = find.nativeSql(sql).findList();
         return recipeList;
