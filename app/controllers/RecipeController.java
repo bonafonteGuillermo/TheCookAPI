@@ -1,7 +1,6 @@
 package controllers;
 
 import com.fasterxml.jackson.databind.JsonNode;
-import io.ebean.DuplicateKeyException;
 import models.Ingredient;
 import models.Kind;
 import models.Recipe;
