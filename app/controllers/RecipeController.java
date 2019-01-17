@@ -42,24 +42,8 @@ public class RecipeController extends Controller {
                 List<Ingredient> ingredientsToCreate = recipe.getIngredients();
 
                 recipe.setIngredients(new ArrayList<>());
+                bindIngredients(recipe, ingredientsToCreate);
 
-                for (Ingredient ingredientToCreate : ingredientsToCreate) {
-                    Ingredient ingredientInDB = Ingredient.findByName(ingredientToCreate.getName());
-                    if (ingredientInDB != null) {
-                        recipe.addIngredient(ingredientInDB);
-                    } else {
-                        Kind typeToCreate = ingredientToCreate.getKind();
-                        Kind typeInDB = Kind.findByName(typeToCreate.getName());
-                        if(typeInDB != null){
-                            ingredientToCreate.setKind(typeInDB);
-                        }else{
-                            typeToCreate.save();
-                            ingredientToCreate.setKind(typeToCreate);
-                        }
-                        ingredientToCreate.save();
-                        recipe.addIngredient(ingredientToCreate);
-                    }
-                }
                 recipeDetails.save();
                 recipe.save();
 
@@ -89,19 +73,34 @@ public class RecipeController extends Controller {
         return result;
     }
 
-    public Result updateRecipe(Integer recipeId, String newName) {
+    public Result updateRecipe(Integer recipeId) {
         Result result;
-        Recipe recipe = Recipe.findById(recipeId.longValue());
+        Optional<String> optional = request().contentType();
 
-        if (recipe != null) {
-            recipe.setName(newName);
-            recipe.update();
+        if (optional.isPresent() && optional.get().equals(Http.MimeTypes.JSON)) {
+            JsonNode jsonNode = request().body().asJson();
+            Form<Recipe> recipeForm = formFactory.form(Recipe.class).bind(jsonNode);
+            Recipe recipe = Recipe.findById(recipeId.longValue());
 
-            Content content = views.xml.recipe.recipe.render(recipe);
-            JsonNode json = play.libs.Json.toJson(recipe);
-            result = negotiateContent(json, content);
+            if (recipe != null) {
+                Recipe newRecipe = recipeForm.get();
+                List<Ingredient> ingredientsToUpdate = newRecipe.getIngredients();
+
+                recipe.setName(newRecipe.getName());
+                recipe.setIngredients(new ArrayList<>());
+                recipe.setRecipeDetails(newRecipe.getRecipeDetails());
+                bindIngredients(recipe, ingredientsToUpdate);
+
+                recipe.update();
+
+                Content content = views.xml.recipe.recipe.render(recipe);
+                JsonNode json = play.libs.Json.toJson(recipe);
+                result = negotiateContent(json, content);
+            } else {
+                result = Results.notFound();
+            }
         } else {
-            result = Results.notFound();
+            result = Results.notAcceptable("Not Acceptable");
         }
         return result;
     }
@@ -146,27 +145,27 @@ public class RecipeController extends Controller {
         return result;
     }
 
-    public Result searchRecipes(){
+    public Result searchRecipes() {
         Result result = badRequest();
 
         Map<String, String[]> queryStringMap = request().queryString();
 
-        if(queryStringMap.containsKey("ingredient")){
+        if (queryStringMap.containsKey("ingredient")) {
             String[] ingredientParam = queryStringMap.get("ingredient");
-            if(ingredientParam[0]!=null && !ingredientParam[0].isEmpty()){
+            if (ingredientParam[0] != null && !ingredientParam[0].isEmpty()) {
                 result = listRecipesWithIngredient(ingredientParam[0]);
             }
 
-        }else if(queryStringMap.containsKey("kind")){
+        } else if (queryStringMap.containsKey("kind")) {
             String[] ingredientParam = queryStringMap.get("kind");
-            if(ingredientParam[0]!=null && !ingredientParam[0].isEmpty()){
+            if (ingredientParam[0] != null && !ingredientParam[0].isEmpty()) {
                 result = listRecipesWithIngredientKind(ingredientParam[0]);
             }
         }
         return result;
     }
 
-    public Result listRecipesWithIngredient(String ingredient){
+    private Result listRecipesWithIngredient(String ingredient) {
         Result result;
 
         List<Recipe> recipeList = Recipe.findByIngredient(ingredient);
@@ -182,7 +181,7 @@ public class RecipeController extends Controller {
         return result;
     }
 
-    public Result listRecipesWithIngredientKind(String kind){
+    private Result listRecipesWithIngredientKind(String kind) {
         Result result;
 
         List<Recipe> recipeList = Recipe.findByIngredientKind(kind);
@@ -196,5 +195,25 @@ public class RecipeController extends Controller {
         }
 
         return result;
+    }
+
+    private void bindIngredients(Recipe recipe, List<Ingredient> ingredientsToBind) {
+        for (Ingredient ingredientToUpdate : ingredientsToBind) {
+            Ingredient ingredientInDB = Ingredient.findByName(ingredientToUpdate.getName());
+            if (ingredientInDB != null) {
+                recipe.addIngredient(ingredientInDB);
+            } else {
+                Kind typeToUpdate = ingredientToUpdate.getKind();
+                Kind typeInDB = Kind.findByName(typeToUpdate.getName());
+                if (typeInDB != null) {
+                    ingredientToUpdate.setKind(typeInDB);
+                } else {
+                    typeToUpdate.save();
+                    ingredientToUpdate.setKind(typeToUpdate);
+                }
+                ingredientToUpdate.save();
+                recipe.addIngredient(ingredientToUpdate);
+            }
+        }
     }
 }

@@ -3,7 +3,7 @@
 #*************************************************
 POST        /recipe                         controllers.RecipeController.createRecipe()
 GET         /recipe/:id                     controllers.RecipeController.retrieveRecipe(id:Integer)
-PUT         /recipe/:id/:newName            controllers.RecipeController.updateRecipe(id:Integer,newName)
+PUT         /recipe/:id                     controllers.RecipeController.updateRecipe(id:Integer)
 DELETE      /recipe/:id                     controllers.RecipeController.deleteRecipe(id:Integer)
 DELETE      /recipes                        controllers.RecipeController.deleteAllRecipes
 GET         /recipes                        controllers.RecipeController.listRecipes
