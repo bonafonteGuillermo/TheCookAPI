@@ -13,6 +13,8 @@ GET         /recipes/search                 controllers.RecipeController.searchR
 #/****************  INGREDIENTS  *****************
 #*************************************************
 POST        /ingredient                     controllers.IngredientController.createIngredient
+GET         /ingredient/:id                 controllers.IngredientController.retrieveIngredient(id:Integer)
+PUT         /ingredient/:id                 controllers.IngredientController.updateIngredient(id:Integer)
 DELETE      /ingredient/:id                 controllers.IngredientController.deleteIngredient(id:Integer)
 GET         /ingredients                    controllers.IngredientController.listIngredients
 DELETE      /ingredients                    controllers.IngredientController.deleteAllIngredients
@@ -20,6 +22,9 @@ DELETE      /ingredients                    controllers.IngredientController.del
 #*************************************************
 #/*******************  KIND  *********************
 #*************************************************
+POST        /kind                           controllers.KindController.createKind
+GET         /kind/:id                       controllers.KindController.retrieveKind(id:Integer)
+PUT         /kind/:id                       controllers.KindController.updateKind(id:Integer)
 DELETE      /kind/:id                       controllers.KindController.deleteKind(id:Integer)
 GET         /kinds                          controllers.KindController.listKinds
 DELETE      /kinds                          controllers.KindController.deleteAllKinds

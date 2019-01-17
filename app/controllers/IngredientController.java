@@ -48,17 +48,42 @@ public class IngredientController extends Controller{
         return result;
     }
 
-    public Result listIngredients(){
+    public Result retrieveIngredient(Integer ingredientId) {
         Result result;
+        Ingredient ingredient = Ingredient.findById(ingredientId.longValue());
 
-        List<Ingredient> ingredientList = Ingredient.findAll();
-
-        if (!ingredientList.isEmpty()) {
-            Content content = views.xml.ingredient.ingredients.render(ingredientList);
-            JsonNode json = play.libs.Json.toJson(ingredientList);
+        if (ingredient != null) {
+            Content content = views.xml.ingredient.ingredient.render(ingredient);
+            JsonNode json = play.libs.Json.toJson(ingredient);
             result = negotiateContent(json, content);
         } else {
             result = Results.notFound();
+        }
+        return result;
+    }
+
+    public Result updateIngredient(Integer ingredientId){
+        Result result;
+        Optional<String> optional = request().contentType();
+
+        if (optional.isPresent() && optional.get().equals(Http.MimeTypes.JSON)) {
+            JsonNode jsonNode = request().body().asJson();
+            Form<Ingredient> ingredientForm = formFactory.form(Ingredient.class).bind(jsonNode);
+
+            if (!ingredientForm.hasErrors()) {
+                Ingredient ingredientToUpdate = ingredientForm.get();
+                bindIngredientKind(ingredientToUpdate);
+
+                ingredientToUpdate.update();
+
+                Content content = views.xml.ingredient.ingredient.render(ingredientToUpdate);
+                JsonNode json = play.libs.Json.toJson(ingredientToUpdate);
+                result = negotiateContent(json, content);
+            } else {
+                result = Results.badRequest(ingredientForm.errorsAsJson());
+            }
+        } else {
+            result = Results.notAcceptable("Not Acceptable");
         }
         return result;
     }
@@ -87,4 +112,18 @@ public class IngredientController extends Controller{
         return result;
     }
 
+    public Result listIngredients(){
+        Result result;
+
+        List<Ingredient> ingredientList = Ingredient.findAll();
+
+        if (!ingredientList.isEmpty()) {
+            Content content = views.xml.ingredient.ingredients.render(ingredientList);
+            JsonNode json = play.libs.Json.toJson(ingredientList);
+            result = negotiateContent(json, content);
+        } else {
+            result = Results.notFound();
+        }
+        return result;
+    }
 }
