@@ -1,11 +1,10 @@
 #*************************************************
 #/******************  RECIPES  *******************
 #*************************************************
-POST        /recipe                         controllers.RecipeController.createRecipe()
+POST        /recipe                         controllers.RecipeController.createRecipe
 GET         /recipe/:id                     controllers.RecipeController.retrieveRecipe(id:Integer)
 PUT         /recipe/:id                     controllers.RecipeController.updateRecipe(id:Integer)
 DELETE      /recipe/:id                     controllers.RecipeController.deleteRecipe(id:Integer)
-PATCH       /recipe/:id                     controllers.RecipeController.patchRecipe(id:Integer)
 DELETE      /recipes                        controllers.RecipeController.deleteAllRecipes
 GET         /recipes                        controllers.RecipeController.listRecipes
 GET         /recipes/search                 controllers.RecipeController.searchRecipes
@@ -13,9 +12,10 @@ GET         /recipes/search                 controllers.RecipeController.searchR
 #*************************************************
 #/****************  INGREDIENTS  *****************
 #*************************************************
+POST        /ingredient                     controllers.IngredientController.createIngredient
+DELETE      /ingredient/:id                 controllers.IngredientController.deleteIngredient(id:Integer)
 GET         /ingredients                    controllers.IngredientController.listIngredients
 DELETE      /ingredients                    controllers.IngredientController.deleteAllIngredients
-
 
 #*************************************************
 #/*******************  KIND  *********************

@@ -15,7 +15,7 @@ import java.util.List;
 @Entity
 public class Recipe extends BaseModel {
 
-    public static final Finder<Long,Recipe> find = new Finder<>(Recipe.class);
+    private static final Finder<Long,Recipe> find = new Finder<>(Recipe.class);
 
     @Constraints.Required
     private String name;

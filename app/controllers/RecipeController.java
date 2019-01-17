@@ -21,6 +21,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
+import static utils.Utils.bindIngredientKind;
 import static utils.Utils.negotiateContent;
 
 public class RecipeController extends Controller {
@@ -162,11 +163,6 @@ public class RecipeController extends Controller {
         return result;
     }
 
-    public Result patchRecipe(Integer recipeId){
-        Result result = badRequest();
-        return result;
-    }
-
     private Result listRecipesWithIngredient(String ingredient) {
         Result result;
         List<Recipe> recipeList = Recipe.findByIngredient(ingredient);
@@ -209,14 +205,4 @@ public class RecipeController extends Controller {
         }
     }
 
-    private void bindIngredientKind(Ingredient ingredientToUpdate) {
-        Kind typeToUpdate = ingredientToUpdate.getKind();
-        Kind typeInDB = Kind.findByName(typeToUpdate.getName());
-        if (typeInDB != null) {
-            ingredientToUpdate.setKind(typeInDB);
-        } else {
-            typeToUpdate.save();
-            ingredientToUpdate.setKind(typeToUpdate);
-        }
-    }
 }

@@ -10,7 +10,7 @@ import javax.persistence.Id;
 @Entity
 public class RecipeDetails extends Model {
 
-	public static final Finder<Long,RecipeDetails> find = new Finder<>(RecipeDetails.class);
+	private static final Finder<Long,RecipeDetails> find = new Finder<>(RecipeDetails.class);
 
 	@Id
     @JsonIgnore

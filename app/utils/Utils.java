@@ -1,6 +1,8 @@
 package utils;
 
 import com.fasterxml.jackson.databind.JsonNode;
+import models.Ingredient;
+import models.Kind;
 import play.mvc.Controller;
 import play.mvc.Http;
 import play.mvc.Result;
@@ -36,6 +38,17 @@ public abstract class Utils extends Controller {
             }
         }else{
             return null;
+        }
+    }
+
+    public static void bindIngredientKind(Ingredient ingredientToUpdate) {
+        Kind kindToUpdate = ingredientToUpdate.getKind();
+        Kind kindInDB = Kind.findByName(kindToUpdate.getName());
+        if (kindInDB != null) {
+            ingredientToUpdate.setKind(kindInDB);
+        } else {
+            kindToUpdate.save();
+            ingredientToUpdate.setKind(kindToUpdate);
         }
     }
 }

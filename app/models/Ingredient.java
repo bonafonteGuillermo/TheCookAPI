@@ -6,7 +6,6 @@ import io.ebean.Ebean;
 import io.ebean.ExpressionList;
 import io.ebean.Finder;
 
-import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
@@ -16,7 +15,7 @@ import java.util.List;
 @Entity
 public class Ingredient extends BaseModel{
 
-    public static final Finder<Long,Ingredient> find = new Finder<>(Ingredient.class);
+    private static final Finder<Long,Ingredient> find = new Finder<>(Ingredient.class);
 
     private String name;
 

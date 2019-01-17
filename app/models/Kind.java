@@ -16,7 +16,7 @@ import java.util.List;
 @Entity
 public class Kind extends BaseModel{
 
-    public static final Finder<Long, Kind> find = new Finder<>(Kind.class);
+    private static final Finder<Long, Kind> find = new Finder<>(Kind.class);
 
     private String name;
 
