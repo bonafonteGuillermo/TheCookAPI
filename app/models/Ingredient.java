@@ -6,6 +6,7 @@ import io.ebean.Ebean;
 import io.ebean.ExpressionList;
 import io.ebean.Finder;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;

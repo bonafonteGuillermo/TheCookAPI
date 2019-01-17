@@ -1,6 +1,7 @@
 package controllers;
 
 import com.fasterxml.jackson.databind.JsonNode;
+import io.ebean.DuplicateKeyException;
 import models.Ingredient;
 import models.Kind;
 import models.Recipe;
@@ -162,6 +163,11 @@ public class RecipeController extends Controller {
         return result;
     }
 
+    public Result patchRecipe(Integer recipeId){
+        Result result = badRequest();
+        return result;
+    }
+
     private Result listRecipesWithIngredient(String ingredient) {
         Result result;
         List<Recipe> recipeList = Recipe.findByIngredient(ingredient);
@@ -194,19 +200,24 @@ public class RecipeController extends Controller {
         for (Ingredient ingredientToUpdate : ingredientsToBind) {
             Ingredient ingredientInDB = Ingredient.findByName(ingredientToUpdate.getName());
             if (ingredientInDB != null) {
+                bindIngredientKind(ingredientToUpdate);
                 recipe.addIngredient(ingredientInDB);
             } else {
-                Kind typeToUpdate = ingredientToUpdate.getKind();
-                Kind typeInDB = Kind.findByName(typeToUpdate.getName());
-                if (typeInDB != null) {
-                    ingredientToUpdate.setKind(typeInDB);
-                } else {
-                    typeToUpdate.save();
-                    ingredientToUpdate.setKind(typeToUpdate);
-                }
+                bindIngredientKind(ingredientToUpdate);
                 ingredientToUpdate.save();
                 recipe.addIngredient(ingredientToUpdate);
             }
+        }
+    }
+
+    private void bindIngredientKind(Ingredient ingredientToUpdate) {
+        Kind typeToUpdate = ingredientToUpdate.getKind();
+        Kind typeInDB = Kind.findByName(typeToUpdate.getName());
+        if (typeInDB != null) {
+            ingredientToUpdate.setKind(typeInDB);
+        } else {
+            typeToUpdate.save();
+            ingredientToUpdate.setKind(typeToUpdate);
         }
     }
 }
