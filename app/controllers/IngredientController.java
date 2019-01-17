@@ -25,7 +25,6 @@ public class IngredientController extends Controller{
         } else {
             result = Results.notFound();
         }
-
         return result;
     }
 

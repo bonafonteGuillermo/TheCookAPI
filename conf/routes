@@ -19,6 +19,7 @@ DELETE      /ingredients                    controllers.IngredientController.del
 #*************************************************
 #/*******************  KIND  *********************
 #*************************************************
+DELETE      /kind/:id                       controllers.KindController.deleteKinds(id:Integer)
 GET         /kinds                          controllers.KindController.listKinds
 DELETE      /kinds                          controllers.KindController.deleteAllKinds
 

@@ -13,6 +13,7 @@ import play.mvc.Http;
 import play.mvc.Result;
 import play.mvc.Results;
 import play.twirl.api.Content;
+import utils.Utils;
 
 import javax.inject.Inject;
 import java.util.ArrayList;
@@ -131,7 +132,6 @@ public class RecipeController extends Controller {
 
     public Result listRecipes() {
         Result result;
-
         List<Recipe> recipeList = Recipe.findAll();
 
         if (!recipeList.isEmpty()) {
@@ -141,33 +141,29 @@ public class RecipeController extends Controller {
         } else {
             result = Results.notFound();
         }
-
         return result;
     }
 
     public Result searchRecipes() {
-        Result result = badRequest();
+        final String INGREDIENT = "ingredient";
+        final String KIND = "kind";
 
+        Result result = badRequest();
         Map<String, String[]> queryStringMap = request().queryString();
 
-        if (queryStringMap.containsKey("ingredient")) {
-            String[] ingredientParam = queryStringMap.get("ingredient");
-            if (ingredientParam[0] != null && !ingredientParam[0].isEmpty()) {
-                result = listRecipesWithIngredient(ingredientParam[0]);
-            }
+        String ingredientParam = Utils.getParam(queryStringMap, INGREDIENT);
+        String kindParam = Utils.getParam(queryStringMap, KIND);
 
-        } else if (queryStringMap.containsKey("kind")) {
-            String[] ingredientParam = queryStringMap.get("kind");
-            if (ingredientParam[0] != null && !ingredientParam[0].isEmpty()) {
-                result = listRecipesWithIngredientKind(ingredientParam[0]);
-            }
+        if (ingredientParam != null) {
+            result = listRecipesWithIngredient(ingredientParam);
+        } else if (kindParam != null) {
+            listRecipesWithIngredientKind(kindParam);
         }
         return result;
     }
 
     private Result listRecipesWithIngredient(String ingredient) {
         Result result;
-
         List<Recipe> recipeList = Recipe.findByIngredient(ingredient);
 
         if (!recipeList.isEmpty()) {
@@ -177,13 +173,11 @@ public class RecipeController extends Controller {
         } else {
             result = Results.notFound();
         }
-
         return result;
     }
 
     private Result listRecipesWithIngredientKind(String kind) {
         Result result;
-
         List<Recipe> recipeList = Recipe.findByIngredientKind(kind);
 
         if (!recipeList.isEmpty()) {
@@ -193,7 +187,6 @@ public class RecipeController extends Controller {
         } else {
             result = Results.notFound();
         }
-
         return result;
     }
 

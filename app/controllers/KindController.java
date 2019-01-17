@@ -2,7 +2,6 @@ package controllers;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import models.Kind;
-import models.Recipe;
 import play.mvc.Controller;
 import play.mvc.Result;
 import play.mvc.Results;
