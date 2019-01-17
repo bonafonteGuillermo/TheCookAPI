@@ -17,6 +17,7 @@ import play.twirl.api.Content;
 import javax.inject.Inject;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 import static utils.Utils.negotiateContent;
@@ -142,6 +143,26 @@ public class RecipeController extends Controller {
             result = Results.notFound();
         }
 
+        return result;
+    }
+
+    public Result searchRecipes(){
+        Result result = badRequest();
+
+        Map<String, String[]> queryStringMap = request().queryString();
+
+        if(queryStringMap.containsKey("ingredient")){
+            String[] ingredientParam = queryStringMap.get("ingredient");
+            if(ingredientParam[0]!=null && !ingredientParam[0].isEmpty()){
+                result = listRecipesWithIngredient(ingredientParam[0]);
+            }
+
+        }else if(queryStringMap.containsKey("kind")){
+            String[] ingredientParam = queryStringMap.get("kind");
+            if(ingredientParam[0]!=null && !ingredientParam[0].isEmpty()){
+                result = listRecipesWithIngredientKind(ingredientParam[0]);
+            }
+        }
         return result;
     }
 
