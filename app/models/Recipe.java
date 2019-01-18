@@ -2,6 +2,7 @@ package models;
 
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import io.ebean.Ebean;
+import io.ebean.ExpressionList;
 import io.ebean.Finder;
 import play.data.validation.Constraints;
 
@@ -38,6 +39,12 @@ public class Recipe extends BaseModel {
 
     public static Recipe findById(Long id) {
         return find.byId(id);
+    }
+
+    public static Recipe findByName(String name) {
+        ExpressionList<Recipe> query = find.query().where().eq("name", name);
+        Recipe recipe = query.findOne();
+        return recipe;
     }
 
     public static List<Recipe> findAll() {

@@ -18,117 +18,99 @@ import java.util.Optional;
 import static utils.Utils.bindIngredientKind;
 import static utils.Utils.negotiateContent;
 
-public class IngredientController extends Controller{
+public class IngredientController extends Controller {
 
     @Inject
     FormFactory formFactory;
 
-    public Result createIngredient(){
-        Result result;
+    public Result createIngredient() {
         Optional<String> optional = request().contentType();
-
-        if (optional.isPresent() && optional.get().equals(Http.MimeTypes.JSON)) {
-            JsonNode jsonNode = request().body().asJson();
-            Form<Ingredient> ingredientForm = formFactory.form(Ingredient.class).bind(jsonNode);
-
-            if (!ingredientForm.hasErrors()) {
-                Ingredient ingredientToCreate = ingredientForm.get();
-                bindIngredientKind(ingredientToCreate);
-
-                ingredientToCreate.save();
-
-                Content content = views.xml.ingredient.ingredient.render(ingredientToCreate);
-                JsonNode json = play.libs.Json.toJson(ingredientToCreate);
-                result = negotiateContent(json, content);
-            } else {
-                result = Results.badRequest(ingredientForm.errorsAsJson());
-            }
-        } else {
-            result = Results.notAcceptable("Not Acceptable");
+        if (!optional.isPresent() || !optional.get().equals(Http.MimeTypes.JSON)) {
+            return Results.notAcceptable("Not Acceptable");
         }
-        return result;
+
+        JsonNode jsonNode = request().body().asJson();
+        Form<Ingredient> ingredientForm = formFactory.form(Ingredient.class).bind(jsonNode);
+        if (ingredientForm.hasErrors()) {
+            Results.badRequest(ingredientForm.errorsAsJson());
+        }
+
+        Ingredient ingredientToCreate = ingredientForm.get();
+        if(Ingredient.findByName(ingredientToCreate.getName())!=null){
+            return Results.status(CONFLICT);
+        }
+
+        bindIngredientKind(ingredientToCreate);
+        ingredientToCreate.save();
+
+        Content content = views.xml.ingredient.ingredient.render(ingredientToCreate);
+        JsonNode json = play.libs.Json.toJson(ingredientToCreate);
+        return negotiateContent(json, content);
     }
 
     public Result retrieveIngredient(Integer ingredientId) {
-        Result result;
         Ingredient ingredient = Ingredient.findById(ingredientId.longValue());
-
-        if (ingredient != null) {
-            Content content = views.xml.ingredient.ingredient.render(ingredient);
-            JsonNode json = play.libs.Json.toJson(ingredient);
-            result = negotiateContent(json, content);
-        } else {
-            result = Results.notFound();
+        if (ingredient == null) {
+            Results.notFound();
         }
-        return result;
+        Content content = views.xml.ingredient.ingredient.render(ingredient);
+        JsonNode json = play.libs.Json.toJson(ingredient);
+        return negotiateContent(json, content);
     }
 
-    public Result updateIngredient(Integer ingredientId){
-        Result result;
+    public Result updateIngredient(Integer ingredientId) {
         Optional<String> optional = request().contentType();
-
-        if (optional.isPresent() && optional.get().equals(Http.MimeTypes.JSON)) {
-            JsonNode jsonNode = request().body().asJson();
-            Form<Ingredient> ingredientForm = formFactory.form(Ingredient.class).bind(jsonNode);
-            Ingredient ingredientInDB = Ingredient.findById(ingredientId.longValue());
-
-            if (!ingredientForm.hasErrors()) {
-                Ingredient newIngredient = ingredientForm.get();
-                ingredientInDB.setName(newIngredient.getName());
-                ingredientInDB.setKind(new Kind());
-                bindIngredientKind(newIngredient);
-                ingredientInDB.setKind(newIngredient.getKind());
-
-                ingredientInDB.update();
-
-                Content content = views.xml.ingredient.ingredient.render(ingredientInDB);
-                JsonNode json = play.libs.Json.toJson(ingredientInDB);
-                result = negotiateContent(json, content);
-            } else {
-                result = Results.badRequest(ingredientForm.errorsAsJson());
-            }
-        } else {
-            result = Results.notAcceptable("Not Acceptable");
+        if (!optional.isPresent() || optional.get().equals(Http.MimeTypes.JSON)) {
+            return Results.notAcceptable("Not Acceptable");
         }
-        return result;
+
+        JsonNode jsonNode = request().body().asJson();
+        Form<Ingredient> ingredientForm = formFactory.form(Ingredient.class).bind(jsonNode);
+        if (ingredientForm.hasErrors()) {
+            return Results.badRequest(ingredientForm.errorsAsJson());
+        }
+
+        Ingredient ingredientInDB = Ingredient.findById(ingredientId.longValue());
+        if (ingredientInDB == null) {
+            return Results.notFound();
+        }
+
+        Ingredient newIngredient = ingredientForm.get();
+        ingredientInDB.setName(newIngredient.getName());
+        ingredientInDB.setKind(new Kind());
+        bindIngredientKind(newIngredient);
+        ingredientInDB.setKind(newIngredient.getKind());
+
+        ingredientInDB.update();
+
+        Content content = views.xml.ingredient.ingredient.render(ingredientInDB);
+        JsonNode json = play.libs.Json.toJson(ingredientInDB);
+        return negotiateContent(json, content);
     }
 
-    public Result deleteIngredient(Integer ingredientid){
-        Result result;
+    public Result deleteIngredient(Integer ingredientid) {
         Ingredient ingredient = Ingredient.findById(ingredientid.longValue());
-
-        if (ingredient != null && ingredient.delete()) {
-            result = ok();
-        } else {
-            result = Results.notFound();
+        if (ingredient == null || !ingredient.delete()) {
+            return Results.notFound();
         }
-        return result;
+        return ok();
     }
 
     public Result deleteAllIngredients() {
-        Result result;
         int affectedRows = Ingredient.deleteAll();
-
-        if (affectedRows != 0) {
-            result = ok();
-        } else {
-            result = Results.notFound();
+        if (affectedRows == 0) {
+            return Results.notFound();
         }
-        return result;
+        return ok();
     }
 
-    public Result listIngredients(){
-        Result result;
-
+    public Result listIngredients() {
         List<Ingredient> ingredientList = Ingredient.findAll();
-
-        if (!ingredientList.isEmpty()) {
-            Content content = views.xml.ingredient.ingredients.render(ingredientList);
-            JsonNode json = play.libs.Json.toJson(ingredientList);
-            result = negotiateContent(json, content);
-        } else {
-            result = Results.notFound();
+        if (ingredientList.isEmpty()) {
+            return  Results.notFound();
         }
-        return result;
+        Content content = views.xml.ingredient.ingredients.render(ingredientList);
+        JsonNode json = play.libs.Json.toJson(ingredientList);
+        return negotiateContent(json, content);
     }
 }

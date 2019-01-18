@@ -22,109 +22,88 @@ public class KindController extends Controller {
     FormFactory formFactory;
 
     public Result createKind() {
-        Result result;
         Optional<String> optional = request().contentType();
-
-        if (optional.isPresent() && optional.get().equals(Http.MimeTypes.JSON)) {
-            JsonNode jsonNode = request().body().asJson();
-            Form<Kind> kindForm = formFactory.form(Kind.class).bind(jsonNode);
-
-            if (!kindForm.hasErrors()) {
-                Kind kindToCreate = kindForm.get();
-                Kind kindInDB = Kind.findByName(kindToCreate.getName());
-                if (kindInDB == null) {
-                    kindToCreate.save();
-
-                    Content content = views.xml.kind.kind.render(kindToCreate);
-                    JsonNode json = play.libs.Json.toJson(kindToCreate);
-                    result = negotiateContent(json, content);
-                }else{
-                    result = Results.status(CONFLICT);
-                }
-            } else {
-                result = Results.badRequest(kindForm.errorsAsJson());
-            }
-        } else {
-            result = Results.notAcceptable("Not Acceptable");
+        if (!optional.isPresent() || !optional.get().equals(Http.MimeTypes.JSON)) {
+            return Results.notAcceptable("Not Acceptable");
         }
-        return result;
+
+        JsonNode jsonNode = request().body().asJson();
+        Form<Kind> kindForm = formFactory.form(Kind.class).bind(jsonNode);
+        if (kindForm.hasErrors()) {
+            return Results.badRequest(kindForm.errorsAsJson());
+        }
+
+        Kind kindToCreate = kindForm.get();
+        if (Kind.findByName(kindToCreate.getName()) != null) {
+            Results.status(CONFLICT);
+        }
+
+        kindToCreate.save();
+
+        Content content = views.xml.kind.kind.render(kindToCreate);
+        JsonNode json = play.libs.Json.toJson(kindToCreate);
+        return negotiateContent(json, content);
     }
 
     public Result retrieveKind(Integer kindId) {
-        Result result;
         Kind kind = Kind.findById(kindId.longValue());
-
-        if (kind != null) {
-            Content content = views.xml.kind.kind.render(kind);
-            JsonNode json = play.libs.Json.toJson(kind);
-            result = negotiateContent(json, content);
-        } else {
-            result = Results.notFound();
+        if (kind == null) {
+            return Results.notFound();
         }
-        return result;
+
+        Content content = views.xml.kind.kind.render(kind);
+        JsonNode json = play.libs.Json.toJson(kind);
+        return negotiateContent(json, content);
     }
 
     public Result updateKind(Integer kindId) {
-        Result result;
         Optional<String> optional = request().contentType();
-
-        if (optional.isPresent() && optional.get().equals(Http.MimeTypes.JSON)) {
-            JsonNode jsonNode = request().body().asJson();
-            Form<Kind> kindForm = formFactory.form(Kind.class).bind(jsonNode);
-
-            if (!kindForm.hasErrors()) {
-                Kind kind = kindForm.get();
-                kind.update();
-
-                Content content = views.xml.kind.kind.render(kind);
-                JsonNode json = play.libs.Json.toJson(kind);
-                result = negotiateContent(json, content);
-            } else {
-                result = Results.badRequest(kindForm.errorsAsJson());
-            }
-        } else {
-            result = Results.notAcceptable("Not Acceptable");
+        if (!optional.isPresent() || !optional.get().equals(Http.MimeTypes.JSON)) {
+            return Results.notAcceptable("Not Acceptable");
         }
-        return result;
+
+        JsonNode jsonNode = request().body().asJson();
+        Form<Kind> kindForm = formFactory.form(Kind.class).bind(jsonNode);
+        if (kindForm.hasErrors()) {
+            return Results.badRequest(kindForm.errorsAsJson());
+        }
+
+        Kind kind = kindForm.get();
+        if (Kind.findById(kind.getId()) == null) {
+            return Results.notFound();
+        }
+
+        kind.update();
+
+        Content content = views.xml.kind.kind.render(kind);
+        JsonNode json = play.libs.Json.toJson(kind);
+        return negotiateContent(json, content);
     }
 
     public Result deleteKind(Integer kindId) {
-        Result result;
         Kind kind = Kind.findById(kindId.longValue());
-
-        if (kind != null && kind.delete()) {
-            result = ok();
-        } else {
-            result = Results.notFound();
+        if (kind == null || !kind.delete()) {
+            return Results.notFound();
         }
-        return result;
+        return ok();
     }
 
     public Result deleteAllKinds() {
-        Result result;
         int affectedRows = Kind.deleteAll();
-
-        if (affectedRows != 0) {
-            result = ok();
-        } else {
-            result = Results.notFound();
+        if (affectedRows == 0) {
+            return Results.notFound();
         }
-        return result;
+        return ok();
     }
 
     public Result listKinds() {
-        Result result;
-
         List<Kind> kindList = Kind.findAll();
-
-        if (!kindList.isEmpty()) {
-            Content content = views.xml.kind.kinds.render(kindList);
-            JsonNode json = play.libs.Json.toJson(kindList);
-            result = negotiateContent(json, content);
-        } else {
-            result = Results.notFound();
+        if (kindList.isEmpty()) {
+            return Results.notFound();
         }
 
-        return result;
+        Content content = views.xml.kind.kinds.render(kindList);
+        JsonNode json = play.libs.Json.toJson(kindList);
+        return negotiateContent(json, content);
     }
 }

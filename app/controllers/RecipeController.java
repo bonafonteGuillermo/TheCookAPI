@@ -31,118 +31,99 @@ public class RecipeController extends Controller {
 
     @Transactional
     public Result createRecipe() {
-        Result result;
         Optional<String> optional = request().contentType();
-
-        if (optional.isPresent() && optional.get().equals(Http.MimeTypes.JSON)) {
-            JsonNode jsonNode = request().body().asJson();
-            Form<Recipe> recipeForm = formFactory.form(Recipe.class).bind(jsonNode);
-
-            if (!recipeForm.hasErrors()) {
-                Recipe recipe = recipeForm.get();
-                RecipeDetails recipeDetails = recipe.getRecipeDetails();
-                List<Ingredient> ingredientsToCreate = recipe.getIngredients();
-
-                recipe.setIngredients(new ArrayList<>());
-                bindIngredients(recipe, ingredientsToCreate);
-
-                recipeDetails.save();
-                recipe.save();
-
-                Content content = views.xml.recipe.recipe.render(recipe);
-                JsonNode json = play.libs.Json.toJson(recipe);
-                result = negotiateContent(json, content);
-            } else {
-                result = Results.badRequest(recipeForm.errorsAsJson());
-            }
-        } else {
-            result = Results.notAcceptable("Not Acceptable");
+        if (!optional.isPresent() || !optional.get().equals(Http.MimeTypes.JSON)) {
+            return Results.notAcceptable("Not Acceptable");
         }
-        return result;
+
+        JsonNode jsonNode = request().body().asJson();
+        Form<Recipe> recipeForm = formFactory.form(Recipe.class).bind(jsonNode);
+        if (recipeForm.hasErrors()) {
+            Results.badRequest(recipeForm.errorsAsJson());
+        }
+
+        Recipe recipe = recipeForm.get();
+        if (Recipe.findByName(recipe.getName()) != null) {
+            return Results.status(CONFLICT);
+        }
+
+        RecipeDetails recipeDetails = recipe.getRecipeDetails();
+        List<Ingredient> ingredientsToCreate = recipe.getIngredients();
+
+        recipe.setIngredients(new ArrayList<>());
+        bindIngredients(recipe, ingredientsToCreate);
+
+        recipeDetails.save();
+        recipe.save();
+
+        Content content = views.xml.recipe.recipe.render(recipe);
+        JsonNode json = play.libs.Json.toJson(recipe);
+        return negotiateContent(json, content);
     }
 
     public Result retrieveRecipe(Integer recipeId) {
-        Result result;
         Recipe recipe = Recipe.findById(recipeId.longValue());
-
-        if (recipe != null) {
-            Content content = views.xml.recipe.recipe.render(recipe);
-            JsonNode json = play.libs.Json.toJson(recipe);
-            result = negotiateContent(json, content);
-        } else {
-            result = Results.notFound();
+        if (recipe == null) {
+            return Results.notFound();
         }
-        return result;
+
+        Content content = views.xml.recipe.recipe.render(recipe);
+        JsonNode json = play.libs.Json.toJson(recipe);
+        return negotiateContent(json, content);
     }
 
     public Result updateRecipe(Integer recipeId) {
-        Result result;
         Optional<String> optional = request().contentType();
-
-        if (optional.isPresent() && optional.get().equals(Http.MimeTypes.JSON)) {
-            JsonNode jsonNode = request().body().asJson();
-            Form<Recipe> recipeForm = formFactory.form(Recipe.class).bind(jsonNode);
-            Recipe recipe = Recipe.findById(recipeId.longValue());
-
-            if (recipe != null) {
-                Recipe newRecipe = recipeForm.get();
-                List<Ingredient> ingredientsToUpdate = newRecipe.getIngredients();
-
-                recipe.setName(newRecipe.getName());
-                recipe.setIngredients(new ArrayList<>());
-                recipe.setRecipeDetails(newRecipe.getRecipeDetails());
-                bindIngredients(recipe, ingredientsToUpdate);
-
-                recipe.update();
-
-                Content content = views.xml.recipe.recipe.render(recipe);
-                JsonNode json = play.libs.Json.toJson(recipe);
-                result = negotiateContent(json, content);
-            } else {
-                result = Results.notFound();
-            }
-        } else {
-            result = Results.notAcceptable("Not Acceptable");
+        if (!optional.isPresent() || !optional.get().equals(Http.MimeTypes.JSON)) {
+            return Results.notAcceptable("Not Acceptable");
         }
-        return result;
+
+        JsonNode jsonNode = request().body().asJson();
+        Form<Recipe> recipeForm = formFactory.form(Recipe.class).bind(jsonNode);
+        Recipe recipe = Recipe.findById(recipeId.longValue());
+        if (recipe == null) {
+            return Results.notFound();
+        }
+
+        Recipe newRecipe = recipeForm.get();
+        List<Ingredient> ingredientsToUpdate = newRecipe.getIngredients();
+
+        recipe.setName(newRecipe.getName());
+        recipe.setIngredients(new ArrayList<>());
+        recipe.setRecipeDetails(newRecipe.getRecipeDetails());
+        bindIngredients(recipe, ingredientsToUpdate);
+
+        recipe.update();
+
+        Content content = views.xml.recipe.recipe.render(recipe);
+        JsonNode json = play.libs.Json.toJson(recipe);
+        return negotiateContent(json, content);
     }
 
     public Result deleteRecipe(Integer recipeId) {
-        Result result;
         Recipe recipe = Recipe.findById(recipeId.longValue());
-
-        if (recipe != null && recipe.delete()) {
-            result = ok();
-        } else {
-            result = Results.notFound();
+        if (recipe == null || !recipe.delete()) {
+            return Results.notFound();
         }
-        return result;
+        return ok();
     }
 
     public Result deleteAllRecipes() {
-        Result result;
         int affectedRows = Recipe.deleteAll();
-
-        if (affectedRows != 0) {
-            result = ok();
-        } else {
-            result = Results.notFound();
+        if (affectedRows == 0) {
+            return Results.notFound();
         }
-        return result;
+        return ok();
     }
 
     public Result listRecipes() {
-        Result result;
         List<Recipe> recipeList = Recipe.findAll();
-
-        if (!recipeList.isEmpty()) {
-            Content content = views.xml.recipe.recipes.render(recipeList);
-            JsonNode json = play.libs.Json.toJson(recipeList);
-            result = negotiateContent(json, content);
-        } else {
-            result = Results.notFound();
+        if (recipeList.isEmpty()) {
+            return Results.notFound();
         }
-        return result;
+        Content content = views.xml.recipe.recipes.render(recipeList);
+        JsonNode json = play.libs.Json.toJson(recipeList);
+        return negotiateContent(json, content);
     }
 
     public Result searchRecipes() {
@@ -158,37 +139,29 @@ public class RecipeController extends Controller {
         if (ingredientParam != null) {
             result = listRecipesWithIngredient(ingredientParam);
         } else if (kindParam != null) {
-            listRecipesWithIngredientKind(kindParam);
+            result = listRecipesWithIngredientKind(kindParam);
         }
         return result;
     }
 
     private Result listRecipesWithIngredient(String ingredient) {
-        Result result;
         List<Recipe> recipeList = Recipe.findByIngredient(ingredient);
-
-        if (!recipeList.isEmpty()) {
-            Content content = views.xml.recipe.recipes.render(recipeList);
-            JsonNode json = play.libs.Json.toJson(recipeList);
-            result = negotiateContent(json, content);
-        } else {
-            result = Results.notFound();
+        if (recipeList.isEmpty()) {
+            return Results.notFound();
         }
-        return result;
+        Content content = views.xml.recipe.recipes.render(recipeList);
+        JsonNode json = play.libs.Json.toJson(recipeList);
+        return negotiateContent(json, content);
     }
 
     private Result listRecipesWithIngredientKind(String kind) {
-        Result result;
         List<Recipe> recipeList = Recipe.findByIngredientKind(kind);
-
-        if (!recipeList.isEmpty()) {
-            Content content = views.xml.recipe.recipes.render(recipeList);
-            JsonNode json = play.libs.Json.toJson(recipeList);
-            result = negotiateContent(json, content);
-        } else {
-            result = Results.notFound();
+        if (recipeList.isEmpty()) {
+            return Results.notFound();
         }
-        return result;
+        Content content = views.xml.recipe.recipes.render(recipeList);
+        JsonNode json = play.libs.Json.toJson(recipeList);
+        return negotiateContent(json, content);
     }
 
     private void bindIngredients(Recipe recipe, List<Ingredient> ingredientsToBind) {
