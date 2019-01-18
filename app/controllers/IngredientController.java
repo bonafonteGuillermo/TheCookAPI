@@ -32,7 +32,7 @@ public class IngredientController extends Controller {
         JsonNode jsonNode = request().body().asJson();
         Form<Ingredient> ingredientForm = formFactory.form(Ingredient.class).bind(jsonNode);
         if (ingredientForm.hasErrors()) {
-            Results.badRequest(ingredientForm.errorsAsJson());
+            return Results.badRequest(ingredientForm.errorsAsJson());
         }
 
         Ingredient ingredientToCreate = ingredientForm.get();
@@ -51,7 +51,7 @@ public class IngredientController extends Controller {
     public Result retrieveIngredient(Integer ingredientId) {
         Ingredient ingredient = Ingredient.findById(ingredientId.longValue());
         if (ingredient == null) {
-            Results.notFound();
+            return Results.notFound();
         }
         Content content = views.xml.ingredient.ingredient.render(ingredient);
         JsonNode json = play.libs.Json.toJson(ingredient);

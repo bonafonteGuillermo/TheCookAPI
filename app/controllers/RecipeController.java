@@ -39,7 +39,7 @@ public class RecipeController extends Controller {
         JsonNode jsonNode = request().body().asJson();
         Form<Recipe> recipeForm = formFactory.form(Recipe.class).bind(jsonNode);
         if (recipeForm.hasErrors()) {
-            Results.badRequest(recipeForm.errorsAsJson());
+            return Results.badRequest(recipeForm.errorsAsJson());
         }
 
         Recipe recipe = recipeForm.get();
@@ -177,5 +177,4 @@ public class RecipeController extends Controller {
             }
         }
     }
-
 }

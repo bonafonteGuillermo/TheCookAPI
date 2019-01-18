@@ -35,7 +35,7 @@ public class KindController extends Controller {
 
         Kind kindToCreate = kindForm.get();
         if (Kind.findByName(kindToCreate.getName()) != null) {
-            Results.status(CONFLICT);
+            return Results.status(CONFLICT);
         }
 
         kindToCreate.save();
