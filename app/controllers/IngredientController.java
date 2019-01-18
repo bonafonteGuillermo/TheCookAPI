@@ -16,6 +16,7 @@ import java.util.List;
 import java.util.Optional;
 
 import static utils.Utils.bindIngredientKind;
+import static utils.Utils.isContentTypeJSON;
 import static utils.Utils.negotiateContent;
 
 public class IngredientController extends Controller {
@@ -24,10 +25,7 @@ public class IngredientController extends Controller {
     FormFactory formFactory;
 
     public Result createIngredient() {
-        Optional<String> optional = request().contentType();
-        if (!optional.isPresent() || !optional.get().equals(Http.MimeTypes.JSON)) {
-            return Results.notAcceptable("Not Acceptable");
-        }
+        if (isContentTypeJSON(request())) return Results.notAcceptable("Not Acceptable");
 
         JsonNode jsonNode = request().body().asJson();
         Form<Ingredient> ingredientForm = formFactory.form(Ingredient.class).bind(jsonNode);
@@ -59,10 +57,7 @@ public class IngredientController extends Controller {
     }
 
     public Result updateIngredient(Integer ingredientId) {
-        Optional<String> optional = request().contentType();
-        if (!optional.isPresent() || optional.get().equals(Http.MimeTypes.JSON)) {
-            return Results.notAcceptable("Not Acceptable");
-        }
+        if (isContentTypeJSON(request())) return Results.notAcceptable("Not Acceptable");
 
         JsonNode jsonNode = request().body().asJson();
         Form<Ingredient> ingredientForm = formFactory.form(Ingredient.class).bind(jsonNode);

@@ -14,6 +14,7 @@ import javax.inject.Inject;
 import java.util.List;
 import java.util.Optional;
 
+import static utils.Utils.isContentTypeJSON;
 import static utils.Utils.negotiateContent;
 
 public class KindController extends Controller {
@@ -22,10 +23,7 @@ public class KindController extends Controller {
     FormFactory formFactory;
 
     public Result createKind() {
-        Optional<String> optional = request().contentType();
-        if (!optional.isPresent() || !optional.get().equals(Http.MimeTypes.JSON)) {
-            return Results.notAcceptable("Not Acceptable");
-        }
+        if (isContentTypeJSON(request())) return Results.notAcceptable("Not Acceptable");
 
         JsonNode jsonNode = request().body().asJson();
         Form<Kind> kindForm = formFactory.form(Kind.class).bind(jsonNode);
@@ -57,10 +55,7 @@ public class KindController extends Controller {
     }
 
     public Result updateKind(Integer kindId) {
-        Optional<String> optional = request().contentType();
-        if (!optional.isPresent() || !optional.get().equals(Http.MimeTypes.JSON)) {
-            return Results.notAcceptable("Not Acceptable");
-        }
+        if (isContentTypeJSON(request())) return Results.notAcceptable("Not Acceptable");
 
         JsonNode jsonNode = request().body().asJson();
         Form<Kind> kindForm = formFactory.form(Kind.class).bind(jsonNode);

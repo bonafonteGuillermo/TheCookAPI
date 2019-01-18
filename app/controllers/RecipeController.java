@@ -22,6 +22,7 @@ import java.util.Map;
 import java.util.Optional;
 
 import static utils.Utils.bindIngredientKind;
+import static utils.Utils.isContentTypeJSON;
 import static utils.Utils.negotiateContent;
 
 public class RecipeController extends Controller {
@@ -31,10 +32,7 @@ public class RecipeController extends Controller {
 
     @Transactional
     public Result createRecipe() {
-        Optional<String> optional = request().contentType();
-        if (!optional.isPresent() || !optional.get().equals(Http.MimeTypes.JSON)) {
-            return Results.notAcceptable("Not Acceptable");
-        }
+        if (isContentTypeJSON(request())) return Results.notAcceptable("Not Acceptable");
 
         JsonNode jsonNode = request().body().asJson();
         Form<Recipe> recipeForm = formFactory.form(Recipe.class).bind(jsonNode);
@@ -61,6 +59,8 @@ public class RecipeController extends Controller {
         return negotiateContent(json, content);
     }
 
+
+
     public Result retrieveRecipe(Integer recipeId) {
         Recipe recipe = Recipe.findById(recipeId.longValue());
         if (recipe == null) {
@@ -73,10 +73,7 @@ public class RecipeController extends Controller {
     }
 
     public Result updateRecipe(Integer recipeId) {
-        Optional<String> optional = request().contentType();
-        if (!optional.isPresent() || !optional.get().equals(Http.MimeTypes.JSON)) {
-            return Results.notAcceptable("Not Acceptable");
-        }
+        if (isContentTypeJSON(request())) return Results.notAcceptable("Not Acceptable");
 
         JsonNode jsonNode = request().body().asJson();
         Form<Recipe> recipeForm = formFactory.form(Recipe.class).bind(jsonNode);
