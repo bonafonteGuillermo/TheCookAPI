@@ -2,6 +2,7 @@ package controllers;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import models.Ingredient;
+import models.Kind;
 import play.data.Form;
 import play.data.FormFactory;
 import play.mvc.Controller;
@@ -69,15 +70,19 @@ public class IngredientController extends Controller{
         if (optional.isPresent() && optional.get().equals(Http.MimeTypes.JSON)) {
             JsonNode jsonNode = request().body().asJson();
             Form<Ingredient> ingredientForm = formFactory.form(Ingredient.class).bind(jsonNode);
+            Ingredient ingredientInDB = Ingredient.findById(ingredientId.longValue());
 
             if (!ingredientForm.hasErrors()) {
-                Ingredient ingredientToUpdate = ingredientForm.get();
-                bindIngredientKind(ingredientToUpdate);
+                Ingredient newIngredient = ingredientForm.get();
+                ingredientInDB.setName(newIngredient.getName());
+                ingredientInDB.setKind(new Kind());
+                bindIngredientKind(newIngredient);
+                ingredientInDB.setKind(newIngredient.getKind());
 
-                ingredientToUpdate.update();
+                ingredientInDB.update();
 
-                Content content = views.xml.ingredient.ingredient.render(ingredientToUpdate);
-                JsonNode json = play.libs.Json.toJson(ingredientToUpdate);
+                Content content = views.xml.ingredient.ingredient.render(ingredientInDB);
+                JsonNode json = play.libs.Json.toJson(ingredientInDB);
                 result = negotiateContent(json, content);
             } else {
                 result = Results.badRequest(ingredientForm.errorsAsJson());
