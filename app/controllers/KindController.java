@@ -30,12 +30,17 @@ public class KindController extends Controller {
             Form<Kind> kindForm = formFactory.form(Kind.class).bind(jsonNode);
 
             if (!kindForm.hasErrors()) {
-                Kind kind = kindForm.get();
-                kind.save();
+                Kind kindToCreate = kindForm.get();
+                Kind kindInDB = Kind.findByName(kindToCreate.getName());
+                if (kindInDB == null) {
+                    kindToCreate.save();
 
-                Content content = views.xml.kind.kind.render(kind);
-                JsonNode json = play.libs.Json.toJson(kind);
-                result = negotiateContent(json, content);
+                    Content content = views.xml.kind.kind.render(kindToCreate);
+                    JsonNode json = play.libs.Json.toJson(kindToCreate);
+                    result = negotiateContent(json, content);
+                }else{
+                    result = Results.status(CONFLICT);
+                }
             } else {
                 result = Results.badRequest(kindForm.errorsAsJson());
             }
@@ -59,7 +64,7 @@ public class KindController extends Controller {
         return result;
     }
 
-    public Result updateKind(Integer kindId){
+    public Result updateKind(Integer kindId) {
         Result result;
         Optional<String> optional = request().contentType();
 
