@@ -6,18 +6,14 @@ import models.Kind;
 import play.data.Form;
 import play.data.FormFactory;
 import play.mvc.Controller;
-import play.mvc.Http;
 import play.mvc.Result;
 import play.mvc.Results;
 import play.twirl.api.Content;
 
 import javax.inject.Inject;
 import java.util.List;
-import java.util.Optional;
 
-import static utils.Utils.bindIngredientKind;
-import static utils.Utils.isContentTypeJSON;
-import static utils.Utils.negotiateContent;
+import static utils.Utils.*;
 
 public class IngredientController extends Controller {
 

@@ -2,14 +2,12 @@ package controllers;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import models.Ingredient;
-import models.Kind;
 import models.Recipe;
 import models.RecipeDetails;
 import play.data.Form;
 import play.data.FormFactory;
 import play.db.ebean.Transactional;
 import play.mvc.Controller;
-import play.mvc.Http;
 import play.mvc.Result;
 import play.mvc.Results;
 import play.twirl.api.Content;
@@ -19,11 +17,8 @@ import javax.inject.Inject;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 
-import static utils.Utils.bindIngredientKind;
-import static utils.Utils.isContentTypeJSON;
-import static utils.Utils.negotiateContent;
+import static utils.Utils.*;
 
 public class RecipeController extends Controller {
 
