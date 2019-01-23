@@ -27,6 +27,6 @@ public class RecipeDescriptionValidator extends Constraints.Validator<String> im
 
     @Override
     public F.Tuple<String, Object[]> getErrorMessageKey() {
-        return new F.Tuple<>("The description is not big enough.", new Object[]{""});
+        return null;
     }
 }
