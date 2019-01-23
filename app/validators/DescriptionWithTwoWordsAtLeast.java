@@ -10,6 +10,8 @@ import java.lang.annotation.Target;
 @Constraint(validatedBy = RecipeDescriptionValidator.class)
 public @interface DescriptionWithTwoWordsAtLeast {
     String message() default "The description is not big enough.";
+
     Class<?>[] groups() default {};
+
     Class<? extends Payload>[] payload() default {};
 }
