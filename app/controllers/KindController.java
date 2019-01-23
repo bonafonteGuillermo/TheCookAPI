@@ -21,7 +21,7 @@ public class KindController extends Controller {
     FormFactory formFactory;
 
     public Result createKind() {
-        if (isContentTypeJSON(request())) return Results.notAcceptable("Not Acceptable");
+        if (!isContentTypeJSON(request())) return Results.notAcceptable("Not Acceptable");
 
         JsonNode jsonNode = request().body().asJson();
         Form<Kind> kindForm = formFactory.form(Kind.class).bind(jsonNode);
@@ -53,7 +53,7 @@ public class KindController extends Controller {
     }
 
     public Result updateKind(Integer kindId) {
-        if (isContentTypeJSON(request())) return Results.notAcceptable("Not Acceptable");
+        if (!isContentTypeJSON(request())) return Results.notAcceptable("Not Acceptable");
 
         JsonNode jsonNode = request().body().asJson();
         Form<Kind> kindForm = formFactory.form(Kind.class).bind(jsonNode);

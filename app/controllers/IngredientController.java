@@ -21,7 +21,7 @@ public class IngredientController extends Controller {
     FormFactory formFactory;
 
     public Result createIngredient() {
-        if (isContentTypeJSON(request())) return Results.notAcceptable("Not Acceptable");
+        if (!isContentTypeJSON(request())) return Results.notAcceptable("Not Acceptable");
 
         JsonNode jsonNode = request().body().asJson();
         Form<Ingredient> ingredientForm = formFactory.form(Ingredient.class).bind(jsonNode);
@@ -53,7 +53,7 @@ public class IngredientController extends Controller {
     }
 
     public Result updateIngredient(Integer ingredientId) {
-        if (isContentTypeJSON(request())) return Results.notAcceptable("Not Acceptable");
+        if (!isContentTypeJSON(request())) return Results.notAcceptable("Not Acceptable");
 
         JsonNode jsonNode = request().body().asJson();
         Form<Ingredient> ingredientForm = formFactory.form(Ingredient.class).bind(jsonNode);

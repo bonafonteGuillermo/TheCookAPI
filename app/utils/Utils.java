@@ -16,7 +16,7 @@ public abstract class Utils extends Controller {
 
     public static boolean isContentTypeJSON(Http.Request request) {
         Optional<String> optional = request.contentType();
-        return !optional.isPresent() || !optional.get().equals(Http.MimeTypes.JSON);
+        return optional.isPresent() && optional.get().equals(Http.MimeTypes.JSON);
     }
 
     public static Result negotiateContent(JsonNode json, Content content) {
