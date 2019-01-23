@@ -5,10 +5,12 @@ import com.fasterxml.jackson.annotation.JsonManagedReference;
 import io.ebean.Ebean;
 import io.ebean.ExpressionList;
 import io.ebean.Finder;
+import play.data.validation.Constraints.*;
 
 import javax.persistence.Entity;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
+import javax.validation.Valid;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -17,12 +19,16 @@ public class Ingredient extends BaseModel{
 
     private static final Finder<Long,Ingredient> find = new Finder<>(Ingredient.class);
 
+    @Required
+    @MaxLength(40)
     private String name;
 
-    @ManyToMany (mappedBy = "ingredients")
+    @Valid
     @JsonBackReference
+    @ManyToMany (mappedBy = "ingredients")
     private List<Recipe> recipes = new ArrayList<>();
 
+    @Valid
 	@ManyToOne
     @JsonManagedReference
 	private Kind kind;

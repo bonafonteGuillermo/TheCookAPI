@@ -3,6 +3,10 @@ package models;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import io.ebean.Finder;
 import io.ebean.Model;
+import org.hibernate.validator.constraints.NotBlank;
+import org.hibernate.validator.constraints.URL;
+import play.data.validation.Constraints.*;
+import validators.DescriptionWithTwoWordsAtLeast;
 
 import javax.persistence.Entity;
 import javax.persistence.Id;
@@ -15,7 +19,13 @@ public class RecipeDetails extends Model {
 	@Id
     @JsonIgnore
 	private Long id;
+
+	@URL
+	@NotBlank
+	@MaxLength(255)
 	private String imageURL;
+
+	@DescriptionWithTwoWordsAtLeast
 	private String description;
 
 	public static RecipeDetails findById(Long id) {
