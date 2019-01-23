@@ -13,11 +13,6 @@ public class RecipeDescriptionValidator extends Constraints.Validator<String> im
 
     @Override
     public boolean isValid(String recipeDescription) {
-        return this.isValid(recipeDescription, null);
-    }
-
-    @Override
-    public boolean isValid(String recipeDescription, ConstraintValidatorContext context) {
         if(recipeDescription != null){
             recipeDescription = recipeDescription.trim();
             return recipeDescription.contains(" ") && recipeDescription.length()<255;
