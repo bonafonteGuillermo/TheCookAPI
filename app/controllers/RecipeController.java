@@ -1,5 +1,6 @@
 package controllers;
 
+import actions.Timed;
 import com.fasterxml.jackson.databind.JsonNode;
 import models.Ingredient;
 import models.Recipe;
@@ -25,6 +26,7 @@ public class RecipeController extends Controller {
     @Inject
     FormFactory formFactory;
 
+    @Timed
     @Transactional
     public Result createRecipe() {
         if (!isContentTypeJSON(request())) return Results.notAcceptable("Not Acceptable");
