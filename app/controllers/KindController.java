@@ -31,7 +31,7 @@ public class KindController extends Controller {
 
         Kind kindToCreate = kindForm.get();
         if (Kind.findByName(kindToCreate.getName()) != null) {
-            return Results.status(CONFLICT, MESSAGE_KIND_CONFLICT);
+            return Results.status(CONFLICT, getMessage(MESSAGE_KIND_CONFLICT));
         }
 
         kindToCreate.save();
@@ -44,7 +44,7 @@ public class KindController extends Controller {
     public Result retrieveKind(Integer kindId) {
         Kind kind = Kind.findById(kindId.longValue());
         if (kind == null) {
-            return Results.notFound(MESSAGE_KIND_NOTFOUND);
+            return Results.notFound(getMessage(MESSAGE_KIND_NOTFOUND));
         }
 
         Content content = views.xml.kind.kind.render(kind);
@@ -63,7 +63,7 @@ public class KindController extends Controller {
 
         Kind kind = kindForm.get();
         if (Kind.findById(kind.getId()) == null) {
-            return Results.notFound(MESSAGE_KIND_NOTFOUND);
+            return Results.notFound(getMessage(MESSAGE_KIND_NOTFOUND));
         }
 
         kind.update();
@@ -76,7 +76,7 @@ public class KindController extends Controller {
     public Result deleteKind(Integer kindId) {
         Kind kind = Kind.findById(kindId.longValue());
         if (kind == null || !kind.delete()) {
-            return Results.notFound(MESSAGE_KIND_NOTFOUND);
+            return Results.notFound(getMessage(MESSAGE_KIND_NOTFOUND));
         }
         return ok();
     }
@@ -84,7 +84,7 @@ public class KindController extends Controller {
     public Result deleteAllKinds() {
         int affectedRows = Kind.deleteAll();
         if (affectedRows == 0) {
-            return Results.notFound(MESSAGE_KIND_NOTFOUND);
+            return Results.notFound(getMessage(MESSAGE_KIND_EMPTY));
         }
         return ok();
     }
@@ -92,7 +92,7 @@ public class KindController extends Controller {
     public Result listKinds() {
         List<Kind> kindList = Kind.findAll();
         if (kindList.isEmpty()) {
-            return Results.notFound(MESSAGE_KIND_NOTFOUND);
+            return Results.notFound(getMessage(MESSAGE_KIND_EMPTY));
         }
 
         Content content = views.xml.kind.kinds.render(kindList);

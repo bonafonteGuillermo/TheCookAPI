@@ -112,7 +112,7 @@ public class RecipeController extends Controller {
     public Result listRecipes() {
         List<Recipe> recipeList = Recipe.findAll();
         if (recipeList.isEmpty()) {
-            return Results.notFound();
+            return Results.notFound(getMessage(MESSAGE_RECIPE_EMPTY));
         }
         Content content = views.xml.recipe.recipes.render(recipeList);
         JsonNode json = play.libs.Json.toJson(recipeList);
@@ -137,7 +137,7 @@ public class RecipeController extends Controller {
     private Result listRecipesWithIngredient(String ingredient) {
         List<Recipe> recipeList = Recipe.findByIngredient(ingredient);
         if (recipeList.isEmpty()) {
-            return Results.notFound();
+            return Results.notFound(getMessage(MESSAGE_RECIPE_EMPTY));
         }
         Content content = views.xml.recipe.recipes.render(recipeList);
         JsonNode json = play.libs.Json.toJson(recipeList);
@@ -147,7 +147,7 @@ public class RecipeController extends Controller {
     private Result listRecipesWithIngredientKind(String kind) {
         List<Recipe> recipeList = Recipe.findByIngredientKind(kind);
         if (recipeList.isEmpty()) {
-            return Results.notFound();
+            return Results.notFound(getMessage(MESSAGE_RECIPE_EMPTY));
         }
         Content content = views.xml.recipe.recipes.render(recipeList);
         JsonNode json = play.libs.Json.toJson(recipeList);
