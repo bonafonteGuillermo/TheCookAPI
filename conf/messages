@@ -1,0 +1,22 @@
+#*************************************************
+#/******************  RECIPES  *******************
+#*************************************************
+recipe-conflict=Recipe already exists with same name
+recipe-notfound=Recipe not found
+
+#*************************************************
+#/****************  INGREDIENTS  *****************
+#*************************************************
+ingredient-conflict=Ingredient already exists with same name
+ingredient-notfound=Ingredient not found
+
+#*************************************************
+#/*******************  KIND  *********************
+#*************************************************
+kind-conflict=Kind already exists with same name
+kind-notfound=Kind not found
+
+#*************************************************
+#/******************  COMMON  ********************
+#*************************************************
+not-acceptable=Body format not acceptable

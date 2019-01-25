@@ -3,6 +3,7 @@ package utils;
 import com.fasterxml.jackson.databind.JsonNode;
 import models.Ingredient;
 import models.Kind;
+import play.i18n.Messages;
 import play.mvc.Controller;
 import play.mvc.Http;
 import play.mvc.Result;
@@ -57,4 +58,11 @@ public abstract class Utils extends Controller {
             ingredientToUpdate.setKind(kindToUpdate);
         }
     }
+
+    public static String getMessage(String key){
+        Messages messages = Http.Context.current().messages();
+        return messages.at(key);
+    }
+
+
 }

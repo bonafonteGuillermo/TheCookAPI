@@ -19,6 +19,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+import static utils.Constants.*;
 import static utils.Utils.*;
 
 public class RecipeController extends Controller {
@@ -29,7 +30,7 @@ public class RecipeController extends Controller {
     @Timed
     @Transactional
     public Result createRecipe() {
-        if (!isContentTypeJSON(request())) return Results.notAcceptable("Not Acceptable");
+        if (!isContentTypeJSON(request())) return Results.notAcceptable(getMessage(MESSAGE_NOT_ACCEPTABLE));
 
         JsonNode jsonNode = request().body().asJson();
         Form<Recipe> recipeForm = formFactory.form(Recipe.class).bind(jsonNode);
@@ -39,7 +40,7 @@ public class RecipeController extends Controller {
 
         Recipe recipe = recipeForm.get();
         if (Recipe.findByName(recipe.getName()) != null) {
-            return Results.status(CONFLICT);
+            return Results.status(CONFLICT, getMessage(MESSAGE_RECIPE_CONFLICT));
         }
 
         RecipeDetails recipeDetails = recipe.getRecipeDetails();
@@ -56,12 +57,10 @@ public class RecipeController extends Controller {
         return negotiateContent(json, content);
     }
 
-
-
     public Result retrieveRecipe(Integer recipeId) {
         Recipe recipe = Recipe.findById(recipeId.longValue());
         if (recipe == null) {
-            return Results.notFound();
+            return Results.notFound(getMessage(MESSAGE_RECIPE_NOTFOUND));
         }
 
         Content content = views.xml.recipe.recipe.render(recipe);
@@ -70,13 +69,13 @@ public class RecipeController extends Controller {
     }
 
     public Result updateRecipe(Integer recipeId) {
-        if (!isContentTypeJSON(request())) return Results.notAcceptable("Not Acceptable");
+        if (!isContentTypeJSON(request())) return Results.notAcceptable(getMessage(MESSAGE_NOT_ACCEPTABLE));
 
         JsonNode jsonNode = request().body().asJson();
         Form<Recipe> recipeForm = formFactory.form(Recipe.class).bind(jsonNode);
         Recipe recipe = Recipe.findById(recipeId.longValue());
         if (recipe == null) {
-            return Results.notFound();
+            return Results.notFound(getMessage(MESSAGE_RECIPE_NOTFOUND));
         }
 
         Recipe newRecipe = recipeForm.get();
@@ -97,7 +96,7 @@ public class RecipeController extends Controller {
     public Result deleteRecipe(Integer recipeId) {
         Recipe recipe = Recipe.findById(recipeId.longValue());
         if (recipe == null || !recipe.delete()) {
-            return Results.notFound();
+            return Results.notFound(getMessage(MESSAGE_RECIPE_NOTFOUND));
         }
         return ok();
     }
@@ -105,7 +104,7 @@ public class RecipeController extends Controller {
     public Result deleteAllRecipes() {
         int affectedRows = Recipe.deleteAll();
         if (affectedRows == 0) {
-            return Results.notFound();
+            return Results.notFound(getMessage(MESSAGE_RECIPE_NOTFOUND));
         }
         return ok();
     }
@@ -121,9 +120,6 @@ public class RecipeController extends Controller {
     }
 
     public Result searchRecipes() {
-        final String INGREDIENT = "ingredient";
-        final String KIND = "kind";
-
         Result result = badRequest();
         Map<String, String[]> queryStringMap = request().queryString();
 
