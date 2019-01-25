@@ -4,6 +4,8 @@
 recipe-conflict=Recipe already exists with same name
 recipe-notfound=Recipe not found
 recipe-empty=No recipes found
+recipe-deleted=Recipe successfully deleted
+recipe-all-deleted=All recipes has been deleted
 
 #*************************************************
 #/****************  INGREDIENTS  *****************
@@ -11,6 +13,8 @@ recipe-empty=No recipes found
 ingredient-conflict=Ingredient already exists with same name
 ingredient-notfound=Ingredient not found
 ingredient-empty=No ingredients found
+ingredient-deleted=Ingredient successfully deleted
+ingredient-all-deleted=All ingredients has been deleted
 
 #*************************************************
 #/*******************  KIND  *********************
@@ -18,6 +22,8 @@ ingredient-empty=No ingredients found
 kind-conflict=Kind already exists with same name
 kind-notfound=Kind not found
 kind-empty=No kinds found
+kind-deleted=Kind successfully deleted
+kind-all-deleted=All kinds has been deleted
 
 #*************************************************
 #/******************  COMMON  ********************

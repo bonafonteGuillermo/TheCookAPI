@@ -98,7 +98,7 @@ public class RecipeController extends Controller {
         if (recipe == null || !recipe.delete()) {
             return Results.notFound(getMessage(MESSAGE_RECIPE_NOTFOUND));
         }
-        return ok();
+        return ok(getMessage(MESSAGE_RECIPE_DELETED));
     }
 
     public Result deleteAllRecipes() {
@@ -106,7 +106,7 @@ public class RecipeController extends Controller {
         if (affectedRows == 0) {
             return Results.notFound(getMessage(MESSAGE_RECIPE_NOTFOUND));
         }
-        return ok();
+        return ok(getMessage(MESSAGE_ALL_RECIPES_DELETED));
     }
 
     public Result listRecipes() {

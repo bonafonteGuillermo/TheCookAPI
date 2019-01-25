@@ -85,7 +85,7 @@ public class IngredientController extends Controller {
         if (ingredient == null || !ingredient.delete()) {
             return Results.notFound(getMessage(MESSAGE_INGREDIENT_NOTFOUND));
         }
-        return ok();
+        return ok(getMessage(MESSAGE_INGREDIENT_DELETED));
     }
 
     public Result deleteAllIngredients() {
@@ -93,7 +93,7 @@ public class IngredientController extends Controller {
         if (affectedRows == 0) {
             return Results.notFound(getMessage(MESSAGE_INGREDIENT_EMPTY));
         }
-        return ok();
+        return ok(getMessage(MESSAGE_ALL_INGREDIENT_DELETED));
     }
 
     public Result listIngredients() {

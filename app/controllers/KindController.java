@@ -21,7 +21,7 @@ public class KindController extends Controller {
     FormFactory formFactory;
 
     public Result createKind() {
-        if (!isContentTypeJSON(request())) return Results.notAcceptable("Not Acceptable");
+        if (!isContentTypeJSON(request())) return Results.notAcceptable(getMessage(MESSAGE_NOT_ACCEPTABLE));
 
         JsonNode jsonNode = request().body().asJson();
         Form<Kind> kindForm = formFactory.form(Kind.class).bind(jsonNode);
@@ -53,7 +53,7 @@ public class KindController extends Controller {
     }
 
     public Result updateKind(Integer kindId) {
-        if (!isContentTypeJSON(request())) return Results.notAcceptable("Not Acceptable");
+        if (!isContentTypeJSON(request())) return Results.notAcceptable(getMessage(MESSAGE_NOT_ACCEPTABLE));
 
         JsonNode jsonNode = request().body().asJson();
         Form<Kind> kindForm = formFactory.form(Kind.class).bind(jsonNode);
@@ -61,15 +61,15 @@ public class KindController extends Controller {
             return Results.badRequest(kindForm.errorsAsJson());
         }
 
-        Kind kind = kindForm.get();
-        if (Kind.findById(kind.getId()) == null) {
+        if (Kind.findById(kindId.longValue()) == null) {
             return Results.notFound(getMessage(MESSAGE_KIND_NOTFOUND));
         }
 
-        kind.update();
+        Kind newKind = kindForm.get();
+        newKind.update();
 
-        Content content = views.xml.kind.kind.render(kind);
-        JsonNode json = play.libs.Json.toJson(kind);
+        Content content = views.xml.kind.kind.render(newKind);
+        JsonNode json = play.libs.Json.toJson(newKind);
         return negotiateContent(json, content);
     }
 
@@ -78,7 +78,7 @@ public class KindController extends Controller {
         if (kind == null || !kind.delete()) {
             return Results.notFound(getMessage(MESSAGE_KIND_NOTFOUND));
         }
-        return ok();
+        return ok(getMessage(MESSAGE_KIND_DELETED));
     }
 
     public Result deleteAllKinds() {
@@ -86,7 +86,7 @@ public class KindController extends Controller {
         if (affectedRows == 0) {
             return Results.notFound(getMessage(MESSAGE_KIND_EMPTY));
         }
-        return ok();
+        return ok(getMessage(MESSAGE_ALL_KINDS_DELETED));
     }
 
     public Result listKinds() {
