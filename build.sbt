@@ -10,7 +10,6 @@ scalaVersion := "2.12.6"
 crossScalaVersions := Seq("2.12.6", "2.11.12")
 
 enablePlugins(PlayEbean)
-//enablePlugins(PlayEnhancer)
 
 libraryDependencies += "com.h2database" % "h2" % "1.4.194"
 libraryDependencies += guice
