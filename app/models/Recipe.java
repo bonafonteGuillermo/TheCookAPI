@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonManagedReference;
 import io.ebean.Ebean;
 import io.ebean.ExpressionList;
 import io.ebean.Finder;
+import io.ebean.annotation.NotNull;
 import play.data.validation.Constraints.*;
 
 import javax.persistence.CascadeType;
