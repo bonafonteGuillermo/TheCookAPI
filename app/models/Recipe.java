@@ -57,6 +57,7 @@ public class Recipe extends BaseModel {
     }
 
     public static List<Recipe> findByIngredient(String ingredient){
+        //TODO make test checking the sql request
         String sql = "SELECT R.id, R.name " +
                         "FROM recipe as R, ingredient AS I, recipe_ingredient as X " +
                         "WHERE X.recipe_id = R.id " +
@@ -115,4 +116,6 @@ public class Recipe extends BaseModel {
         this.ingredients.add(ingredient);
         ingredient.getRecipes().add(this);
     }
+
+    //TODO function returning boolean when the ingredient
 }

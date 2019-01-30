@@ -62,6 +62,8 @@ public class RecipeControllerTest {
 
         List<Recipe> recipeList = Recipe.findAll();
         assertEquals(recipeList.size(), 0);
+
+        Recipe.findAll();
     }
 
     @Test

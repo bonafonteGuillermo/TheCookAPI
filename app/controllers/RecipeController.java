@@ -71,8 +71,9 @@ public class RecipeController extends Controller {
     public Result updateRecipe(Integer recipeId) {
         if (!isContentTypeJSON(request())) return Results.notAcceptable(getMessage(MESSAGE_NOT_ACCEPTABLE));
 
-        JsonNode jsonNode = request().body().asJson();
-        Form<Recipe> recipeForm = formFactory.form(Recipe.class).bind(jsonNode);
+        //JsonNode jsonNode = request().body().asJson();
+        //TODO REFACTOR
+        Form<Recipe> recipeForm = formFactory.form(Recipe.class).bindFromRequest();
         Recipe recipe = Recipe.findById(recipeId.longValue());
         if (recipe == null) {
             return Results.notFound(getMessage(MESSAGE_RECIPE_NOTFOUND));
@@ -130,6 +131,8 @@ public class RecipeController extends Controller {
             result = listRecipesWithIngredient(ingredientParam);
         } else if (kindParam != null) {
             result = listRecipesWithIngredientKind(kindParam);
+        }else{
+            //TODO
         }
         return result;
     }
@@ -154,6 +157,7 @@ public class RecipeController extends Controller {
         return negotiateContent(json, content);
     }
 
+    //TODO Move to Recipe model class
     private void bindIngredients(Recipe recipe, List<Ingredient> ingredientsToBind) {
         for (Ingredient ingredientToUpdate : ingredientsToBind) {
             Ingredient ingredientInDB = Ingredient.findByName(ingredientToUpdate.getName());

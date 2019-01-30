@@ -17,4 +17,6 @@ public class TimerAction extends Action<Timed> {
         return ret;
     }
 
+    //TODO check token and allow proceed or not cheking tokens in DB
+
 }
