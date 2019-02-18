@@ -19,7 +19,7 @@ import static play.test.Helpers.*;
 
 public class RecipeControllerTest {
 
-    private final String GET = "GET";
+/*    private final String GET = "GET";
     private final String POST = "POST";
     private final String UPDATE = "UPDATE";
     private final String DELETE = "DELETE";
@@ -52,12 +52,13 @@ public class RecipeControllerTest {
 
     @Test
     public void miTest(){
-        Http.RequestBuilder request = fakeRequest("GET", "/recipes");
-        Helpers.route(Helpers.fakeApplication(),request);
+//        Http.RequestBuilder request = fakeRequest("GET", "/recipes");
+//        Helpers.route(Helpers.fakeApplication(),request);
 
 //        assertEquals(OK, result.status());
 //        assertEquals("text/html", result.contentType().get());
 //        assertEquals("utf-8", result.charset().get());
 //        assertTrue(contentAsString(result).contains("Welcome"));
     }
+    */
 }
