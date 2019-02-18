@@ -16,7 +16,4 @@ public class TimerAction extends Action<Timed> {
         System.out.println(ctx.toString() + " in " + (end - start) + " ms");
         return ret;
     }
-
-    //TODO check token and allow proceed or not cheking tokens in DB
-
 }

@@ -34,22 +34,6 @@ public class RecipeControllerTest {
     public void setUp() {
         Http.Context context = Helpers.httpContext();
         Http.Context.current.set(context);
-
-        /*database = Databases.createFrom(
-                    "org.h2.Driver",
-                    "jdbc:h2:~/test.db",
-                "");*/
-
-        //TODO In memory DB
-        /*database = Databases.inMemory(
-                "mydatabase",
-                ImmutableMap.of(
-                        "MODE", "MYSQL"
-                ),
-                ImmutableMap.of(
-                        "logStatements", true
-                )
-        );*/
     }
 
     @After
