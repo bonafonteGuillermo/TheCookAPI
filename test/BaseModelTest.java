@@ -1,9 +1,9 @@
-/*
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import play.test.Helpers;
 import play.test.FakeApplication;
 
+//TODO implement
 public class BaseModelTest {
     public static FakeApplication app;
 
@@ -17,4 +17,4 @@ public class BaseModelTest {
     public static void stopApp() {
         Helpers.stop(app);
     }
-}*/
+}

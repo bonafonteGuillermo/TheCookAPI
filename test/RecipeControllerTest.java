@@ -17,9 +17,10 @@ import static org.junit.Assert.assertEquals;
 import static play.mvc.Http.Status.NOT_FOUND;
 import static play.test.Helpers.*;
 
+//TODO implement
 public class RecipeControllerTest {
 
-/*    private final String GET = "GET";
+    private final String GET = "GET";
     private final String POST = "POST";
     private final String UPDATE = "UPDATE";
     private final String DELETE = "DELETE";
@@ -60,5 +61,4 @@ public class RecipeControllerTest {
 //        assertEquals("utf-8", result.charset().get());
 //        assertTrue(contentAsString(result).contains("Welcome"));
     }
-    */
 }
