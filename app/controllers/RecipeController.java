@@ -72,6 +72,10 @@ public class RecipeController extends Controller {
         if (!isContentTypeJSON(request())) return Results.notAcceptable(getMessage(MESSAGE_NOT_ACCEPTABLE));
 
         Form<Recipe> recipeForm = formFactory.form(Recipe.class).bindFromRequest();
+        if (recipeForm.hasErrors()) {
+            return Results.badRequest(recipeForm.errorsAsJson());
+        }
+
         Recipe recipe = Recipe.findById(recipeId.longValue());
         if (recipe == null) {
             return Results.notFound(getMessage(MESSAGE_RECIPE_NOTFOUND));
