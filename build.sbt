@@ -20,9 +20,6 @@ libraryDependencies += jdbc
 assemblyJarName in assembly := "thecookapi.jar"
 test in assembly := {}
 
-mainClass in assembly := Some("play.core.server.ProdServerStart")
-fullClasspath in assembly += Attributed.blank(PlayKeys.playPackageAssets.value)
-
 assemblyMergeStrategy in assembly := {
   case manifest if manifest.contains("MANIFEST.MF") =>
     MergeStrategy.discard
